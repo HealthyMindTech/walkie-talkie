@@ -12,6 +12,7 @@ import 'config.dart';
 import 'geolocator.dart';
 import 'login_screen.dart';
 import 'widgets/geometry.dart';
+import 'adventure_page.dart';
 
 final log = Logger('main');
 
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) =>
             ensureLoggedIn(child: const MyHomePage(title: 'Walkie Talkie')),
+        '/adventure': (context) => ensureLoggedIn(child: const AdventurePage()),
       },
     );
   }
@@ -89,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
         width: width,
         height: height,
         point: point,
-        child: CircleWidget(size: const Size(width, height), color: Colors.purple));
+        child: const CircleWidget(size: Size(width, height), color: Colors.purple));
   }
 
   Future<void> _setPosition() async {
