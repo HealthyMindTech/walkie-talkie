@@ -11,6 +11,7 @@ import 'package:latlong2/latlong.dart';
 import 'config.dart';
 import 'geolocator.dart';
 import 'login_screen.dart';
+import 'widgets/geometry.dart';
 
 final log = Logger('main');
 
@@ -88,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
         width: width,
         height: height,
         point: point,
-        child: CircleWidget(size: Size(width, height), color: Colors.purple));
+        child: CircleWidget(size: const Size(width, height), color: Colors.purple));
   }
 
   Future<void> _setPosition() async {
@@ -109,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _haveMoved(Position pos) async {
     final newPos = LatLng(pos.latitude, pos.longitude);
-    await _mapController.onReady;
+
     seenEvents++;
 
     if (seenEvents < 8) {
@@ -149,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Welcome back!',
+              'Welcome to Walkie Talkie!',
             ),
             Container(
                 height: MediaQuery.of(context).size.height - 300,
@@ -167,8 +168,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         userAgentPackageName: 'com.example.app',
                       ),
                       if (position != null)
-                        MarkerLayerOptions(
-                            markers: [_createMyMarker(position!)]),
+                        MarkerLayer(
+                          markers: [_createMyMarker(position!)]),
                     ]))
           ],
         ),
