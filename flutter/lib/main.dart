@@ -15,6 +15,7 @@ void main() async {
     print('${record.level.name}: ${record.time}: ${record.message}');
   });
   setPathUrlStrategy();
+
   await Supabase.initialize(
       url: AppConfig.supabaseUrl, anonKey: AppConfig.supabaseAnonkey);
 
@@ -22,7 +23,6 @@ void main() async {
 }
 
 Widget ensureLoggedIn({required Widget child}) {
-  log.info('ensureLoggedIn: ${Supabase.instance.client.auth.currentUser}');
   if (Supabase.instance.client.auth.currentUser == null) {
     return const LoginPage();
   } else {
