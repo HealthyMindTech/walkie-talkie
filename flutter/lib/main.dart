@@ -32,7 +32,6 @@ Widget ensureLoggedIn({required Widget child}) {
     return child;
   }
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -46,6 +45,26 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      builder: (context, child) {
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final maxWidth = 500.0; // Set the max width for a 'mobile-like' view
+            final isDesktop = MediaQuery.of(context).size.width > maxWidth;
+            if (isDesktop) {
+              // If the screen width is larger than maxWidth, constrain the child's width
+              return Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: maxWidth),
+                  child: child,
+                ),
+              );
+            } else {
+              // If the screen width is less than maxWidth, allow child to fill the space
+              return child!;
+            }
+          },
+        );
+      },
       routes: {
         '/': (context) => ensureLoggedIn(child: const HomePage()),
         '/explore': (context) =>

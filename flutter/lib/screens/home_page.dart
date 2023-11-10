@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/bottom_navigation.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -59,6 +60,7 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: const BottomNavigation(), 
     );
   }
 }
@@ -265,6 +267,7 @@ class GoExploreButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             // Action when button is pressed
+            Navigator.pushNamed(context, '/explore');
           },
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
