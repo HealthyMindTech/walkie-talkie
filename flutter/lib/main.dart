@@ -66,9 +66,10 @@ class MyHomePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
+              final navigator = Navigator.of(context);
               await Supabase.instance.client.auth.signOut();
 
-              Navigator.of(context).pushReplacement(
+              navigator.pushReplacement(
                 MaterialPageRoute(builder: (context) => const LoginPage()),
               );
             },
