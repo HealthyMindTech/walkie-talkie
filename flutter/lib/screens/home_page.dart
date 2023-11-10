@@ -1,35 +1,64 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/bottom_navigation.dart';
-
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
       body: SafeArea(
         child: Stack(
           children: [
-            CharacterWidget(), // This will be the full background
+            CharacterWidget(), // Full background character image
             Column(
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween, // Align children to both ends
+              crossAxisAlignment: CrossAxisAlignment
+                  .stretch, // Stretch the column across the screen width
               children: [
-                Spacer(flex: 1), // Takes all available space
-                GoExploreButton(), // 'Go Explore!' button with margin
-                StatsWidget(), // Stats widget at the bottom
+                const SizedBox(height: 16), // Add some spacing at the top
+                FittedBox(
+                  // Ensures the text fits within the available space
+                  fit: BoxFit.scaleDown,
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: DefaultTextStyle.of(context).style,
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'John ',
+                          style: TextStyle(
+                            fontSize: 26.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'the ',
+                          style: TextStyle(
+                            fontSize: 26.0,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'Chef',
+                          style: TextStyle(
+                            fontSize: 26.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Spacer(), // Pushes all children towards the ends
+                GoExploreButton(), // 'Go Explore!' button
+                StatsWidget(), // Stats widget
               ],
             ),
           ],
         ),
       ),
-      bottomNavigationBar: const BottomNavigation(), // Bottom navigation bar
     );
   }
 }
@@ -70,52 +99,83 @@ class CharacterWidget extends StatelessWidget {
     );
   }
 }
-
-// ... Other widget classes remain unchanged ...
-
 class StatsWidget extends StatelessWidget {
   const StatsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    // Mock level and experience percentage
+    final int level = 5;
+    final double experience = 0.75; // 75% towards the next level
+    final int xpNeeded = 100; // Mock value for XP needed for the next level
+    final int xpRemaining = ((1 - experience) * xpNeeded).toInt(); // Calculate remaining XP
+
+    return Padding(
       padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: const [
-          Positioned(
-            top: 16,
-            left: 16,
-            right: 16,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Level and XP remaining row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                StatItem(
-                  icon: Icons.favorite,
-                  value: '38',
-                  maxValue: '100',
-                  color: Colors.red,
+                Text(
+                  'Lvl $level', // Level display
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
                 ),
-                StatItem(
-                  icon: Icons.flash_on,
-                  value: '30',
-                  maxValue: '100',
-                  color: Colors.yellow,
-                ),
-                StatItem(
-                  icon: Icons.local_dining,
-                  value: '55',
-                  maxValue: '100',
-                  color: Colors.green,
+                Text(
+                  '$xpRemaining XP to next lvl', // XP remaining for next level
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
+                  ),
                 ),
               ],
             ),
-          ),
-        ],
+            const SizedBox(height: 4), // Spacing between text and bar
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10), // Fully rounded corners
+              child: Stack(
+                children: [
+                  Container(
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[800], // Background color of the bar
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  FractionallySizedBox(
+                    widthFactor: experience, // Fraction of the bar filled with experience
+                    child: Container(
+                      height: 10,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [
+                            Colors.orange[700]!, // Start color of the gradient
+                            Colors.orange[900]!, // End color of the gradient
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -205,7 +265,6 @@ class GoExploreButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             // Action when button is pressed
-            Navigator.pushNamed(context, '/explore');
           },
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
