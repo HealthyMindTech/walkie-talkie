@@ -75,14 +75,21 @@ class _MyHomePageState extends State<MyHomePage> {
   late Stream<Position>? posStream;
   StreamSubscription? subscription;
   LatLng? position;
-  int seenEvents = 0;
+  static final log = Logger("_MyHomePageState");
 
   @override
   void initState() {
     super.initState();
     _mapController = MapController();
-    _setPosition();
-    _trackPosition();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        _setPosition();
+        _trackPosition();
+    });
+
+    GeolocatorPlatform.instance.getCurrentPosition().then((x) {
+        log.info("X: $x");
+    });
   }
 
   Marker _createMyMarker(LatLng point) {
@@ -98,12 +105,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _setPosition() async {
+    log.info("reading position");
     final Position position = await GeoLocator.instance.determinePosition();
+    log.info("position: $position");
+
     final LatLng latlng = LatLng(position.latitude, position.longitude);
 
     if (mounted) {
       setState(() {
-        this.position = latlng;
+          this.position = latlng;
       });
     }
   }
@@ -115,13 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _haveMoved(Position pos) async {
     final newPos = LatLng(pos.latitude, pos.longitude);
-
-    seenEvents++;
-
-    if (seenEvents < 8) {
-      return;
-    }
-
+    log.info("position: $newPos");
     _mapController.move(newPos, _mapController.camera.zoom);
     if (mounted) {
       setState(() {
@@ -176,7 +180,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       TileLayer(
                         urlTemplate:
                             'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        userAgentPackageName: 'com.example.app',
+                            tileProvider: NetworkTileProvider(),
+                            userAgentPackageName: 'com.example.app',
                       ),
                       if (position != null)
                         MarkerLayer(markers: [_createMyMarker(position!)]),
@@ -195,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void dispose() {
     super.dispose();
-    (_mapController as MapControllerImpl).dispose();
+    _mapController.dispose();
     subscription?.cancel();
   }
 }
