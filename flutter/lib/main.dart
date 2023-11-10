@@ -7,7 +7,7 @@ import 'config.dart';
 import 'screens/explore_page.dart';
 import 'screens/profile_screen.dart';
 import 'screens/login_screen.dart';
-import 'screens/adventure_page.dart';
+import 'screens/home_page.dart';
 import 'screens/social_page.dart';
 
 final log = Logger('main');
