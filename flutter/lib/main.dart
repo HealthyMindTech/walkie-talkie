@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 import 'config.dart';
 import 'login_screen.dart';
 
 void main() {
+  setPathUrlStrategy();
   Supabase.initialize(
       url: AppConfig.supabaseUrl, anonKey: AppConfig.supabaseAnonkey);
 
@@ -34,7 +36,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Walkie Talkie'),
+      routes: {
+        '/': (context) =>
+            ensureLoggedIn(child: const MyHomePage(title: 'Walkie Talkie')),
+      },
     );
   }
 }
