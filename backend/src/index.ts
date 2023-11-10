@@ -1,10 +1,13 @@
 import express from 'express';
 import * as http from 'http';
 import * as WebSocket from 'ws';
+import OpenAI from 'openai';
+
 const app = express();
 
 const server = http.createServer(app);
 const webSocketServer = new WebSocket.Server({ server });
+const openai = new OpenAI({ apiKey: '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' });
 
 webSocketServer.on(
     'connection',
