@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc -b",
+    "build": "npx esbuild src/index.ts --bundle --outfile=dist/server.js --format=cjs --platform=node",
     "dev": "tsc --watch & nodemon dist/index.js"
   },
   "repository": {
@@ -26,6 +26,7 @@
     "ws": "^8.14.2"
   },
   "devDependencies": {
+    "esbuild": "^0.19.5",
     "nodemon": "^3.0.1",
     "typescript": "^5.2.2"
   }
