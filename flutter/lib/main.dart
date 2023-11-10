@@ -1,26 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_strategy/url_strategy.dart';
+import 'package:logging/logging.dart';
 
 import 'config.dart';
 import 'login_screen.dart';
 
-void main() {
+final log = Logger('main');
+
+
+void main() async {
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((record) {
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
   setPathUrlStrategy();
-  Supabase.initialize(
+  await Supabase.initialize(
       url: AppConfig.supabaseUrl, anonKey: AppConfig.supabaseAnonkey);
 
   runApp(const MyApp());
 }
 
 Widget ensureLoggedIn({required Widget child}) {
-  return Builder(builder: (BuildContext context) {
-    if (Supabase.instance.client.auth.currentUser == null) {
-      return const LoginPage();
-    } else {
-      return child;
-    }
-  });
+  log.info('ensureLoggedIn: ${Supabase.instance.client.auth.currentUser}');
+  if (Supabase.instance.client.auth.currentUser == null) {
+    return const LoginPage();
+  } else {
+    return child;
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -44,27 +51,23 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
+class MyHomePage extends StatelessWidget {
   final String title;
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+  const MyHomePage({super.key, required this.title});
 
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text(title),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
               await Supabase.instance.client.auth.signOut();
+
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => const LoginPage()),
               );
