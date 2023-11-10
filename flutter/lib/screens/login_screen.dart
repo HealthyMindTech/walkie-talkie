@@ -1,7 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/material.dart';
 
-import 'config.dart';
+import '../config.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});

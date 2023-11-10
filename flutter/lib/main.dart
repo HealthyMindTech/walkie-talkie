@@ -10,9 +10,10 @@ import 'package:latlong2/latlong.dart';
 
 import 'config.dart';
 import 'geolocator.dart';
-import 'login_screen.dart';
+import 'screens/config_screen.dart';
+import 'screens/login_screen.dart';
 import 'widgets/geometry.dart';
-import 'adventure_page.dart';
+import 'screens/adventure_page.dart';
 
 final log = Logger('main');
 
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
         '/': (context) =>
             ensureLoggedIn(child: const MyHomePage(title: 'Walkie Talkie')),
         '/adventure': (context) => ensureLoggedIn(child: const AdventurePage()),
+        '/config': (context) => ensureLoggedIn(child: const ConfigPage()),
       },
     );
   }
@@ -91,7 +93,8 @@ class _MyHomePageState extends State<MyHomePage> {
         width: width,
         height: height,
         point: point,
-        child: const CircleWidget(size: Size(width, height), color: Colors.purple));
+        child: const CircleWidget(
+            size: Size(width, height), color: Colors.purple));
   }
 
   Future<void> _setPosition() async {
@@ -135,6 +138,12 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         actions: [
           IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.pushNamed(context, '/config');
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
               final navigator = Navigator.of(context);
@@ -170,8 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         userAgentPackageName: 'com.example.app',
                       ),
                       if (position != null)
-                        MarkerLayer(
-                          markers: [_createMyMarker(position!)]),
+                        MarkerLayer(markers: [_createMyMarker(position!)]),
                     ]))
           ],
         ),
