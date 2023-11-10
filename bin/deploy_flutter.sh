@@ -5,7 +5,7 @@ if command -v enable_flutter.sh > /dev/null;  then
    . enable_flutter.sh
 fi
 
-export API_HOST="https://walkietalkie.tech/api"
+export API_HOST="wss://walkietalkie.tech/api"
 cd $(dirname $0)/../flutter
 
 flutter build web \

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "npx esbuild src/index.ts --bundle --outfile=dist/server.js --format=cjs --platform=node",
+    "build": "npx esbuild src/index.ts --bundle --outfile=build/server.js --format=cjs --platform=node",
     "dev": "tsc --watch & nodemon dist/index.js"
   },
   "repository": {
