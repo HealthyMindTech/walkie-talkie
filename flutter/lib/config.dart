@@ -4,6 +4,10 @@ class AppConfig {
     defaultValue: 'io.supabase.flutter://login-callback/',
   );
 
+  static const String apiHost = String.fromEnvironment(
+    'API_HOST',
+    defaultValue: 'wss://walkietalkie.tech/api'
+  );
   static const String supabaseUrl = String.fromEnvironment("SUPABASE_URL",
       defaultValue: 'https://rwlnvnijfocuqumwkgmv.supabase.co');
   static const String supabaseAnonkey = String.fromEnvironment(

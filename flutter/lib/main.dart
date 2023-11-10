@@ -32,6 +32,7 @@ Widget ensureLoggedIn({required Widget child}) {
     return child;
   }
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -48,13 +49,13 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return LayoutBuilder(
           builder: (context, constraints) {
-            final maxWidth = 500.0; // Set the max width for a 'mobile-like' view
+            const maxWidth = 500.0; // Set the max width for a 'mobile-like' view
             final isDesktop = MediaQuery.of(context).size.width > maxWidth;
             if (isDesktop) {
               // If the screen width is larger than maxWidth, constrain the child's width
               return Center(
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: maxWidth),
+                  constraints: const BoxConstraints(maxWidth: maxWidth),
                   child: child,
                 ),
               );

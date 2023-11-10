@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            CharacterWidget(), // Full background character image
+            const CharacterWidget(), // Full background character image
             Column(
               crossAxisAlignment: CrossAxisAlignment
                   .stretch, // Stretch the column across the screen width
@@ -60,7 +60,7 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const BottomNavigation(), 
+      bottomNavigationBar: const BottomNavigation(),
     );
   }
 }
@@ -107,9 +107,9 @@ class StatsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Mock level and experience percentage
-    final int level = 5;
-    final double experience = 0.75; // 75% towards the next level
-    final int xpNeeded = 100; // Mock value for XP needed for the next level
+    const int level = 5;
+    const double experience = 0.75; // 75% towards the next level
+    const int xpNeeded = 100; // Mock value for XP needed for the next level
     final int xpRemaining = ((1 - experience) * xpNeeded).toInt(); // Calculate remaining XP
 
     return Padding(

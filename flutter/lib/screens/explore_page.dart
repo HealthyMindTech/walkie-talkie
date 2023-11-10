@@ -6,8 +6,11 @@ import 'package:latlong2/latlong.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../geolocator.dart';
 import '../widgets/geometry.dart';
+import '../services/backend.dart';
 import 'login_screen.dart';
 import 'package:logging/logging.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'dart:convert';
 
 class ExplorePage extends StatefulWidget {
   final String title;
@@ -23,20 +26,22 @@ class _ExplorePageState extends State<ExplorePage> {
   late Stream<Position>? posStream;
   StreamSubscription? subscription;
   LatLng? position;
+  WebSocketChannel? _webSocketChannel;
   static final log = Logger("_MyHomePageState");
 
   @override
   void initState() {
     super.initState();
     _mapController = MapController();
+    final token = Supabase.instance.client.auth.currentSession!.accessToken;
 
+    Backend().startWebsocket(token).then((webSocket) {
+      log.info("websocket: $webSocket");
+      _webSocketChannel = webSocket;
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _setPosition();
       _trackPosition();
-    });
-
-    GeolocatorPlatform.instance.getCurrentPosition().then((x) {
-      log.info("X: $x");
     });
   }
 
@@ -52,13 +57,21 @@ class _ExplorePageState extends State<ExplorePage> {
             size: Size(width, height), color: Colors.purple));
   }
 
+  void _sendPosition(Position position) {
+    _webSocketChannel?.sink.add(jsonEncode({
+      "type": "location",
+      "location": {
+        "latitude": position.latitude,
+        "longitude": position.longitude,
+      },
+    }));
+  }
+
   Future<void> _setPosition() async {
-    log.info("reading position");
     final Position position = await GeoLocator.instance.determinePosition();
-    log.info("position: $position");
 
+    _sendPosition(position);
     final LatLng latlng = LatLng(position.latitude, position.longitude);
-
     if (mounted) {
       setState(() {
         this.position = latlng;
@@ -73,6 +86,7 @@ class _ExplorePageState extends State<ExplorePage> {
 
   void _haveMoved(Position pos) async {
     final newPos = LatLng(pos.latitude, pos.longitude);
+    _sendPosition(pos);
     log.info("position: $newPos");
     _mapController.move(newPos, _mapController.camera.zoom);
     if (mounted) {
@@ -122,7 +136,7 @@ class _ExplorePageState extends State<ExplorePage> {
                     mapController: _mapController,
                     options: const MapOptions(
                       initialCenter: LatLng(60.1699, 24.9384),
-                      initialZoom: 12,
+                      initialZoom: 15.0,
                     ),
                     children: [
                       TileLayer(

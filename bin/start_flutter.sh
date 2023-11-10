@@ -8,5 +8,5 @@ cd $(dirname $0)/../flutter
 flutter run \
         --web-port=10100 \
         --dart-define "LOGIN_REDIRECT=http://localhost:10100" \
+        --dart-define "API_HOST=ws://localhost:8080/" \
         -d web-server
-
