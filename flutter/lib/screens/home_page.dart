@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-class AdventurePage extends StatelessWidget {
-  const AdventurePage({super.key});
+import '../widgets/bottom_navigation.dart';
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,8 @@ class AdventurePage extends StatelessWidget {
           children: [
             CharacterWidget(), // This will be the full background
             Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Align children to both ends
+              mainAxisAlignment:
+                  MainAxisAlignment.spaceBetween, // Align children to both ends
               children: [
                 Spacer(flex: 1), // Takes all available space
                 GoExploreButton(), // 'Go Explore!' button with margin
@@ -30,7 +33,6 @@ class AdventurePage extends StatelessWidget {
     );
   }
 }
-
 
 class CharacterStatsWidget extends StatelessWidget {
   const CharacterStatsWidget({super.key});
@@ -85,35 +87,35 @@ class StatsWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: const [
-        Positioned(
-          top: 16,
-          left: 16,
-          right: 16,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              StatItem(
-                icon: Icons.favorite,
-                value: '38',
-                maxValue: '100',
-                color: Colors.red,
-              ),
-              StatItem(
-                icon: Icons.flash_on,
-                value: '30',
-                maxValue: '100',
-                color: Colors.yellow,
-              ),
-              StatItem(
-                icon: Icons.local_dining,
-                value: '55',
-                maxValue: '100',
-                color: Colors.green,
-              ),
-            ],
+          Positioned(
+            top: 16,
+            left: 16,
+            right: 16,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                StatItem(
+                  icon: Icons.favorite,
+                  value: '38',
+                  maxValue: '100',
+                  color: Colors.red,
+                ),
+                StatItem(
+                  icon: Icons.flash_on,
+                  value: '30',
+                  maxValue: '100',
+                  color: Colors.yellow,
+                ),
+                StatItem(
+                  icon: Icons.local_dining,
+                  value: '55',
+                  maxValue: '100',
+                  color: Colors.green,
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
       ),
     );
   }
@@ -178,7 +180,8 @@ class GoExploreButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0), // Add margin around the button
+      padding: const EdgeInsets.symmetric(
+          horizontal: 50.0, vertical: 20.0), // Add margin around the button
       child: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -202,11 +205,14 @@ class GoExploreButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             // Action when button is pressed
+            Navigator.pushNamed(context, '/explore');
           },
           style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.white, backgroundColor: Colors.transparent, // Text color
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.transparent, // Text color
             shadowColor: Colors.transparent, // Remove shadow from button itself
-            padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
             ),
@@ -222,33 +228,6 @@ class GoExploreButton extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-
-class BottomNavigation extends StatelessWidget {
-  const BottomNavigation({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    // Use BottomNavigationBar for navigation
-    return BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.book),
-          label: 'Journal',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.people),
-          label: 'Friends',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
-        ),
-      ],
-      selectedItemColor: Colors.amber[800],
     );
   }
 }

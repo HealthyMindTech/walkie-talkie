@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class ConfigPage extends StatefulWidget {
-  const ConfigPage({Key? key}) : super(key: key);
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
-  State<ConfigPage> createState() => _ConfigPageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ConfigPageState extends State<ConfigPage> {
+class _ProfilePageState extends State<ProfilePage> {
   String userTheme = "fantasy";
 
   @override
