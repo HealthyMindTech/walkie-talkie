@@ -44,8 +44,8 @@ class _HomePageState extends State<HomePage> {
                         label: 'Name',
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.done,
-                          onFieldSubmitted: (value) {
-                          },
+                        onFieldSubmitted: (value) {
+                        },
                       ),
                   ),
             ),
@@ -216,7 +216,7 @@ class CustomInput extends StatelessWidget {
                 ),
                 counterText: "", // Hide character count
               ),
-              maxLength: 25, // Limit characters to 20
+              maxLength: 50,
             ),
           ),
           const SizedBox(width: 16), // Space between label and text field
