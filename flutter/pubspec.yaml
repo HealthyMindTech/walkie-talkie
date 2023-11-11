@@ -49,6 +49,7 @@ dependencies:
   just_audio: ^0.9.35
   google_fonts: ^6.1.0
   wakelock: ^0.6.2
+  stroke_text: ^0.0.2
 
 dev_dependencies:
   flutter_test:

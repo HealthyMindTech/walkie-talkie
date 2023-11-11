@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:logging/logging.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'config.dart';
 import 'screens/explore_page.dart';
@@ -9,6 +10,7 @@ import 'screens/profile_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_page.dart';
 import 'screens/social_page.dart';
+
 
 final log = Logger('main');
 
@@ -45,6 +47,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        textTheme: GoogleFonts.carterOneTextTheme(
+           Theme.of(context).textTheme,
+      ),
       ),
       builder: (context, child) {
         return LayoutBuilder(

@@ -196,12 +196,15 @@ class _ExplorePageState extends State<ExplorePage> {
                                         children: [
                                           // Character icon
                                           const Icon(
-                                            Icons.person,
+                                            Icons.arrow_back,
                                             color: Colors.white,
                                           ),
                                         ],
                                         onPressed:
-                                            () {}, // Replace with your button press action
+                                            () {
+                                              audioPlayerKey.currentState?.audioPlayer.stop();
+                                              Navigator.pop(context);
+                                            }
                                       ),
                                       RichText(
                                         textAlign: TextAlign.center,
@@ -422,6 +425,7 @@ class _ExplorePageState extends State<ExplorePage> {
     _webSocketChannel?.sink.close();
     timer?.cancel();
     Wakelock.disable();
+    audioPlayerKey.currentState?.audioPlayer.stop();
     super.dispose();
   }
 }

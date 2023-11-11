@@ -1,176 +1,145 @@
 import 'package:flutter/material.dart';
-import '../widgets/bottom_navigation.dart';
+import '../widgets/custom_button.dart';
+import 'package:stroke_text/stroke_text.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final TextEditingController _nameController =
+      TextEditingController(text: 'John the Chef');
+  final TextEditingController _classController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Always remember to dispose of the controllers when the widget is removed from the widget tree.
+    _nameController.dispose();
+    _classController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  // Corrected code inside the build method of _HomePageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor:
+          const Color.fromRGBO(36, 58, 47, 1), // Dark green background
       body: SafeArea(
-        child: Stack(
-          children: [
-            const CharacterWidget(), // Full background character image
-            Column(
-              crossAxisAlignment: CrossAxisAlignment
-                  .stretch, // Stretch the column across the screen width
-              children: [
-                const SizedBox(height: 16), // Add some spacing at the top
-                FittedBox(
-                  // Ensures the text fits within the available space
-                  fit: BoxFit.scaleDown,
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: DefaultTextStyle.of(context).style,
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: 'John ',
-                          style: TextStyle(
-                            fontSize: 26.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'the ',
-                          style: TextStyle(
-                            fontSize: 26.0,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'Chef',
-                          style: TextStyle(
-                            fontSize: 26.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const Spacer(), // Pushes all children towards the ends
-                const GoExploreButton(), // 'Go Explore!' button
-                const StatsWidget(), // Stats widget
-              ],
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: const BottomNavigation(),
-    );
-  }
-}
-
-class CharacterStatsWidget extends StatelessWidget {
-  const CharacterStatsWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min, // Use min to wrap content in the column
-      children: [
-        // Wrap StatsWidget with a container that has a semi-transparent background
-        Container(
-          padding: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.5), // Semi-transparent black
-            borderRadius: BorderRadius.circular(10), // Rounded corners
-          ),
-          child: const StatsWidget(),
-        ),
-      ],
-    );
-  }
-}
-
-class CharacterWidget extends StatelessWidget {
-  const CharacterWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    // This widget now acts as a full background
-    return Positioned.fill(
-      child: Image.asset(
-        'assets/character.png',
-        fit: BoxFit.cover,
-      ),
-    );
-  }
-}
-class StatsWidget extends StatelessWidget {
-  const StatsWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    // Mock level and experience percentage
-    const int level = 5;
-    const double experience = 0.75; // 75% towards the next level
-    const int xpNeeded = 100; // Mock value for XP needed for the next level
-    final double xpRemaining = 4.1; // Calculate remaining XP
-
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.5),
-          borderRadius: BorderRadius.circular(10),
-        ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Level and XP remaining row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Lvl $level', // Level display
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-                Text(
-                  'Walk $xpRemaining km to next lvl', // XP remaining for next level
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 16,
-                  ),
-                ),
-              ],
+            Expanded(
+              flex: 1,
+              // This should wrap the ListView
+              child: Container(
+                  padding: EdgeInsets.fromLTRB(12, 12, 148, 16),
+                  child: ListView(
+                    children: [
+                      CustomInput(
+                        controller: _nameController,
+                        label: 'Name',
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (value) {
+                          // Handle the input submission if needed
+                        },
+                      ),
+                    ],
+                  )),
             ),
-            const SizedBox(height: 4), // Spacing between text and bar
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10), // Fully rounded corners
-              child: Stack(
+            Expanded(
+              flex: 4, // Adjust the flex factor as needed
+              child: Container(
+                margin: const EdgeInsets.symmetric(
+                    horizontal: 16), // Horizontal margin
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Color(0xFFfc8c3e),
+                    width: 3,
+                  ),
+                  borderRadius: BorderRadius.circular(
+                      10), // Rounded corners for the container
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(
+                      10), // Apply the same rounded corners to the clipper
+                  child: Image.asset(
+                    'assets/character.png',
+                    width: MediaQuery.of(context)
+                        .size
+                        .width, // Force the image to take full width of the screen
+                    fit: BoxFit
+                        .fitWidth, // Fit the width of the image to the container
+                    alignment: Alignment
+                        .topCenter, // Align the image to the top of the container
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 16),
+            Container(
+              // Center aligned
+              alignment: Alignment.center,
+              child: CustomButton(
                 children: [
-                  Container(
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[800], // Background color of the bar
-                      borderRadius: BorderRadius.circular(10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 10.0),
+                    child: StrokeText(
+                      text: "Go Explore!",
+                      textStyle: TextStyle(
+                        fontSize: 28,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      // strokeColor: Colors.black,
+                      strokeWidth: 2,
+                    ),
+                  )
+                ],
+                onPressed: () {
+                  // Navigate to the explore page
+                },
+              ),
+            ),
+            SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Level 1',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  FractionallySizedBox(
-                    widthFactor: experience, // Fraction of the bar filled with experience
-                    child: Container(
-                      height: 10,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: [
-                            Colors.orange[700]!, // Start color of the gradient
-                            Colors.orange[900]!, // End color of the gradient
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                  SizedBox(height: 8),
+                  LinearProgressIndicator(
+                    value: 0.75, // Mock progress value
+                    backgroundColor: Colors.grey[800],
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Colors.orange, // Orange progress bar
+                    ),
+                    minHeight: 10,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    '3.2 km walked - 4.1 km to next level',
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 16,
                     ),
                   ),
                 ],
@@ -183,112 +152,80 @@ class StatsWidget extends StatelessWidget {
   }
 }
 
-class StatItem extends StatelessWidget {
-  final IconData icon;
-  final String value;
-  final String maxValue;
-  final Color color;
+class CustomInput extends StatelessWidget {
+  final TextEditingController controller;
+  final String label;
+  final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
+  final Function(String)? onFieldSubmitted;
 
-  const StatItem({
+  const CustomInput({
     Key? key,
-    required this.icon,
-    required this.value,
-    required this.maxValue,
-    required this.color,
+    required this.controller,
+    required this.label,
+    this.keyboardType,
+    this.textInputAction,
+    this.onFieldSubmitted,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Icon(icon, size: 24, color: color),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyle(
-            color: color,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Stack(
-          children: [
-            Container(
-              width: 50,
-              height: 8,
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
-            Container(
-              width: 50 * (int.parse(value) / int.parse(maxValue)),
-              height: 8,
-              decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class GoExploreButton extends StatelessWidget {
-  const GoExploreButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-          horizontal: 50.0, vertical: 20.0), // Add margin around the button
-      child: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.25),
-              spreadRadius: 2,
-              blurRadius: 4,
-              offset: const Offset(0, 4), // changes position of shadow
-            ),
-          ],
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Colors.orange[700]!, // Top-left color
-              Colors.orange[900]!, // Bottom-right color
-            ],
-          ),
-          borderRadius: BorderRadius.circular(30), // Rounded corners
-        ),
-        child: ElevatedButton(
-          onPressed: () {
-            // Action when button is pressed
-            Navigator.pushNamed(context, '/explore');
-          },
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.transparent, // Text color
-            shadowColor: Colors.transparent, // Remove shadow from button itself
-            padding:
-                const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-            elevation: 0,
-          ),
-          child: const Text(
-            'GO EXPLORE',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.2,
+      padding: const EdgeInsets.symmetric(vertical: 8.0), // Vertical padding
+      child: Row(
+        children: [
+          Expanded(
+            flex:
+                1, // Adjust the ratio of label width to text field width as needed
+            child: Text(
+              label,
+              style: const TextStyle(
+                color: Colors.white, // Label color
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
             ),
           ),
-        ),
+          SizedBox(width: 16), // Space between label and text field
+          Expanded(
+            flex: 5, // Increase the flex of text field to give it more space
+            child: TextFormField(
+              controller: controller,
+              keyboardType: keyboardType,
+              textInputAction: textInputAction,
+              onFieldSubmitted: onFieldSubmitted,
+              style: const TextStyle(
+                color: Colors.black, // Text color
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.symmetric(
+                    vertical: 20.0,
+                    horizontal: 10), // Vertical padding inside the text field
+                filled: true,
+                fillColor: const Color(0xFFfbfcf4), // Field fill color
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xFFae3d0b), // Border color
+                    width: 2,
+                  ),
+                  borderRadius:
+                      BorderRadius.circular(8.0), // Field border radius
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xFFae3d0b), // Focused border color
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                counterText: "", // Hide character count
+              ),
+              maxLength: 20, // Limit characters to 20
+            ),
+          ),
+        ],
       ),
     );
   }
