@@ -26,8 +26,19 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     audioPlayer.playerStateStream.listen(_onAudioPlayerListener);
 
     // Play chimes initially
-    _playChimes();
+    //r_playChimes();
   }
+
+  void startAudio() {
+    if (urls.isNotEmpty) {
+      currentUrlIndex = 0; // Start from the first file
+      _play();
+    } else {
+      // If no files are present, start chimes or handle accordingly
+      _playChimes();
+    }
+  }
+
 
   void _onAudioPlayerListener(PlayerState event) async {
     if (event.processingState == ProcessingState.completed) {
@@ -97,23 +108,29 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.all(16.0),
-        color: Colors.black.withOpacity(0.5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            if (urls.isNotEmpty)
-              IconButton(
-                  onPressed: _playOrPause,
-                  icon: isPaused
-                      ? const Icon(Icons.play_arrow, color: Colors.white)
-                      : const Icon(Icons.pause, color: Colors.white)),
-            const Text(
-              'Audio Player',
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
-        ));
+    return Stack(
+      children: [
+        // Existing player UI
+        Container(
+          padding: const EdgeInsets.all(16.0),
+          color: Colors.black.withOpacity(0.5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              if (urls.isNotEmpty)
+                IconButton(
+                    onPressed: _playOrPause,
+                    icon: isPaused
+                        ? const Icon(Icons.play_arrow, color: Colors.white)
+                        : const Icon(Icons.pause, color: Colors.white)),
+              const Text(
+                'Audio Player',
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

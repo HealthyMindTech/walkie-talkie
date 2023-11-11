@@ -29,11 +29,13 @@ class _ExplorePageState extends State<ExplorePage> {
   static final log = Logger('_ExplorePageState');
   late MapController _mapController;
   late Stream<Position>? posStream;
-  final GlobalKey<AudioPlayerWidgetState> audioPlayerKey = GlobalKey<AudioPlayerWidgetState>();
+  final GlobalKey<AudioPlayerWidgetState> audioPlayerKey =
+      GlobalKey<AudioPlayerWidgetState>();
   StreamSubscription? subscription;
   LatLng? position;
 
   WebSocketChannel? _webSocketChannel;
+  bool userHasInteracted = false;
 
   void _websocketListen(dynamic event) async {
     try {
@@ -43,7 +45,8 @@ class _ExplorePageState extends State<ExplorePage> {
         case "audio":
           final path = decodedJson["path"];
           log.info("Received audio: $path");
-          final url = Supabase.instance.client.storage.from('audio').getPublicUrl(path);
+          final url =
+              Supabase.instance.client.storage.from('audio').getPublicUrl(path);
           audioPlayerKey.currentState!.addUrl(url);
           break;
         default:
@@ -132,221 +135,259 @@ class _ExplorePageState extends State<ExplorePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          const Color.fromRGBO(36, 58, 47, 1), // Set the background color
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Top area with character name and progress bar
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              color: const Color.fromRGBO(36, 58, 47, 1),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    color: Color.fromRGBO(36, 58, 47, 1),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 2.0,
-                                color: Color(0xFFfbfcf4),
-                              ),
-                              const SizedBox(height: 2),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      backgroundColor: const Color.fromRGBO(36, 58, 47, 1),
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Column(
+              children: [
+                // Top area with character name and progress bar
+                Container(
+                  padding: const EdgeInsets.all(16.0),
+                  color: const Color.fromRGBO(36, 58, 47, 1),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
+                        color: Color.fromRGBO(36, 58, 47, 1),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  CustomButton(
-                                    // Level indicator
+                                  Container(
+                                    height: 2.0,
+                                    color: Color(0xFFfbfcf4),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      // Character icon
-                                      const Icon(
-                                        Icons.person,
-                                        color: Colors.white,
+                                      CustomButton(
+                                        children: [
+                                          // Character icon
+                                          const Icon(
+                                            Icons.person,
+                                            color: Colors.white,
+                                          ),
+                                        ],
+                                        onPressed:
+                                            () {}, // Replace with your button press action
+                                      ),
+                                      RichText(
+                                        textAlign: TextAlign.center,
+                                        text: TextSpan(
+                                          style: DefaultTextStyle.of(context)
+                                              .style,
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text: 'John ',
+                                              style: TextStyle(
+                                                fontSize: 26.0,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color(0xFFfbfcf4),
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: 'the ',
+                                              style: TextStyle(
+                                                fontSize: 26.0,
+                                                fontWeight: FontWeight.normal,
+                                                color: Color(0xFFfbfcf4),
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: 'Chef',
+                                              style: TextStyle(
+                                                fontSize: 26.0,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color(0xFFfbfcf4),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      CustomButton(
+                                        // Level indicator
+                                        children: [
+                                          Text(
+                                            'lvl 5',
+                                            style: TextStyle(
+                                              color: Color(0xFFfbfcf4),
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                        ],
+                                        onPressed:
+                                            () {}, // Replace with your button press action
                                       ),
                                     ],
-                                    onPressed:
-                                        () {}, // Replace with your button press action
                                   ),
-                                  RichText(
-                                    textAlign: TextAlign.center,
-                                    text: TextSpan(
-                                      style: DefaultTextStyle.of(context).style,
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                          text: 'John ',
-                                          style: TextStyle(
-                                            fontSize: 26.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xFFfbfcf4),
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: 'the ',
-                                          style: TextStyle(
-                                            fontSize: 26.0,
-                                            fontWeight: FontWeight.normal,
-                                            color: Color(0xFFfbfcf4),
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: 'Chef',
-                                          style: TextStyle(
-                                            fontSize: 26.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xFFfbfcf4),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  CustomButton(
-                                    // Level indicator
-                                    children: [
-                                      Text(
-                                        'lvl 5',
-                                        style: TextStyle(
-                                          color: Color(0xFFfbfcf4),
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      )
-                                    ],
-                                    onPressed:
-                                        () {}, // Replace with your button press action
+                                  SizedBox(height: 2),
+                                  Container(
+                                    height: 2.0,
+                                    color: Color(0xFFfbfcf4),
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 2),
-                              Container(
-                                height: 2.0,
-                                color: Color(0xFFfbfcf4),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.all(0.0),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 0.0),
-                      decoration: BoxDecoration(
-                        // color: Colors.black.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Level and XP remaining row
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '3.2 km walked', // Level display
-                                style: const TextStyle(
-                                  color: Color(0xFFfbfcf4),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              Text(
-                                '4.1 km to level up', // XP remaining for next level
-                                style: const TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
+                      SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.all(0.0),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 0.0),
+                          decoration: BoxDecoration(
+                            // color: Colors.black.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          const SizedBox(
-                              height: 4), // Spacing between text and bar
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                                10), // Fully rounded corners
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 10,
-                                  decoration: BoxDecoration(
-                                    color: Color(
-                                        0xFFfbfcf4), // Background color of the bar
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                                FractionallySizedBox(
-                                  widthFactor:
-                                      0.75, // Fraction of the bar filled with experience
-                                  child: Container(
-                                    height: 10,
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.centerLeft,
-                                        end: Alignment.centerRight,
-                                        colors: [
-                                          Color(0xFFf8c85c),
-                                          Color(0xFFfc8c3e)
-                                        ],
-                                      ),
-                                      borderRadius: BorderRadius.circular(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Level and XP remaining row
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '3.2 km walked', // Level display
+                                    style: const TextStyle(
+                                      color: Color(0xFFfbfcf4),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
                                     ),
                                   ),
+                                  Text(
+                                    '4.1 km to level up', // XP remaining for next level
+                                    style: const TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                  height: 4), // Spacing between text and bar
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                    10), // Fully rounded corners
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      height: 10,
+                                      decoration: BoxDecoration(
+                                        color: Color(
+                                            0xFFfbfcf4), // Background color of the bar
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    FractionallySizedBox(
+                                      widthFactor:
+                                          0.75, // Fraction of the bar filled with experience
+                                      child: Container(
+                                        height: 10,
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight,
+                                            colors: [
+                                              Color(0xFFf8c85c),
+                                              Color(0xFFfc8c3e)
+                                            ],
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
+                    ],
+                  ),
+                ),
+                // Map area with padding
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                      ),
+                      child: FlutterMap(
+                          mapController: _mapController,
+                          options: MapOptions(
+                            center: position ?? const LatLng(0, 0),
+                            zoom: 13.0,
+                          ),
+                          children: [
+                            TileLayer(
+                              urlTemplate:
+                                  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                              tileProvider: NetworkTileProvider(),
+                              userAgentPackageName: 'com.example.app',
+                            ),
+                            if (position != null)
+                              MarkerLayer(
+                                  markers: [_createMyMarker(position!)]),
+                          ]),
                     ),
                   ),
-                ],
-              ),
+                ),
+                // Bottom area for audio player
+                AudioPlayerWidget(
+                    key: audioPlayerKey, onEndOfAudio: _onAudioEnd)
+              ],
             ),
-            // Map area with padding
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                  ),
-                  child: FlutterMap(
-                      mapController: _mapController,
-                      options: MapOptions(
-                        center: position ?? const LatLng(0, 0),
-                        zoom: 13.0,
+          ),
+          if (!userHasInteracted)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black.withOpacity(0.7),
+                child: Center(
+                  child: CustomButton(
+                    children: [
+                      const Icon(
+                        Icons.play_arrow,
+                        color: Colors.white,
                       ),
-                      children: [
-                        TileLayer(
-                          urlTemplate:
-                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                          tileProvider: NetworkTileProvider(),
-                          userAgentPackageName: 'com.example.app',
+                      const SizedBox(width: 8),
+                      const Text(
+                        'Start Listening',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
                         ),
-                        if (position != null)
-                          MarkerLayer(markers: [_createMyMarker(position!)]),
-                      ]),
+                      ),
+                    ],
+                    onPressed: () {
+                      setState(() {
+                        userHasInteracted = true;
+                      });
+                      audioPlayerKey.currentState?.startAudio(); // Call the method to start audio
+                      // Optionally start the audio player here
+                    },
+                  ),
                 ),
               ),
             ),
-            // Bottom area for audio player
-            AudioPlayerWidget(key: audioPlayerKey, onEndOfAudio: _onAudioEnd)
-          ],
-        ),
+        ],
       ),
     );
   }
-
 
   @override
   void dispose() {
