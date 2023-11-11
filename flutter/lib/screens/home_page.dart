@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController _nameController =
-      TextEditingController(text: 'John the Chef');
+      TextEditingController(text: 'John the Muffin Man');
   final TextEditingController _classController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
@@ -202,7 +202,7 @@ class CustomInput extends StatelessWidget {
                 filled: true,
                 fillColor: const Color(0xFFfbfcf4), // Field fill color
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Color(0xFFae3d0b), // Border color
                     width: 2,
                   ),
@@ -210,7 +210,7 @@ class CustomInput extends StatelessWidget {
                       BorderRadius.circular(8.0), // Field border radius
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Color(0xFFae3d0b), // Focused border color
                     width: 2.0,
                   ),
@@ -221,9 +221,9 @@ class CustomInput extends StatelessWidget {
               maxLength: 20, // Limit characters to 20
             ),
           ),
-          SizedBox(width: 16), // Space between label and text field
+          const SizedBox(width: 16), // Space between label and text field
           CustomButton(
-              children: [Icon(Icons.casino, color: Colors.white, size: 32)],
+              children: const [Icon(Icons.casino, color: Colors.white, size: 32)],
               onPressed: () {
                 controller.text = getRandomNameProfession();
               })
@@ -281,6 +281,7 @@ List<String> realLifeProfessions = [
   'Architect',
   'Teacher',
   'Chef',
+  'Muffin Man',
   'Artist',
   'Nurse',
   'Farmer',
