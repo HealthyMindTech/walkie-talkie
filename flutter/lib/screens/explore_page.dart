@@ -21,6 +21,52 @@ class ExplorePage extends StatefulWidget {
   State<ExplorePage> createState() => _ExplorePageState();
 }
 
+class CustomButton extends StatelessWidget {
+  // Add children and onPressed to your properties
+  final List<Widget>? children;
+  final VoidCallback onPressed;
+
+  const CustomButton({
+    Key? key,
+    required this.children,
+    required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+            horizontal: 10.0, vertical: 6.0), // Increased vertical padding
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFf8c85c), Color(0xFFfc8c3e)], // Orange gradient
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.25),
+              offset: Offset(0, 4),
+              blurRadius: 4.0,
+            ),
+          ],
+          borderRadius: BorderRadius.circular(10.0), // Slightly rounded corners
+          border: Border.all(
+            color: Color(0xFFae3d0b), // Adjusted for a darker border color
+            width: 2.0,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: children!,
+        ),
+      ),
+    );
+  }
+}
+
 class _ExplorePageState extends State<ExplorePage> {
   late MapController _mapController;
   late Stream<Position>? posStream;
@@ -99,70 +145,156 @@ class _ExplorePageState extends State<ExplorePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              Navigator.pushNamed(context, '/config');
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              final navigator = Navigator.of(context);
-              await Supabase.instance.client.auth.signOut();
-
-              navigator.pushReplacement(
-                MaterialPageRoute(builder: (context) => const LoginPage()),
-              );
-            },
-          ),
-        ],
-      ),
-      body: Center(
+      backgroundColor:
+          Color.fromRGBO(36, 58, 47, 1), // Set the background color
+      body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Welcome to Walkie Talkie!',
-            ),
+          children: [
+            // Top area with character name and progress bar
             Container(
-                height: MediaQuery.of(context).size.height - 300,
-                padding: const EdgeInsets.all(20.0),
-                child: FlutterMap(
-                    mapController: _mapController,
-                    options: const MapOptions(
-                      initialCenter: LatLng(60.1699, 24.9384),
-                      initialZoom: 15.0,
+              padding: EdgeInsets.all(16.0),
+              color: Color.fromRGBO(36, 58, 47, 1),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    color: Color.fromRGBO(36, 58, 47, 1),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 2.0,
+                                color: Colors.grey[300],
+                              ),
+                              SizedBox(height: 2),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'John the Chef',
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey[300],
+                                    ),
+                                  ),
+                                  CustomButton(
+                                    // Level indicator
+                                    children: [
+                                      Text(
+                                        '45',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    ],
+                                    onPressed:
+                                        () {}, // Replace with your button press action
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 2),
+                              Container(
+                                height: 2.0,
+                                color: Colors.grey[300],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    children: [
-                      TileLayer(
-                        urlTemplate:
-                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        tileProvider: NetworkTileProvider(),
-                        userAgentPackageName: 'com.example.app',
+                  ),
+                  SizedBox(height: 8),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: LinearProgressIndicator(
+                      value: 0.45, // Dummy progress value
+                      backgroundColor: Colors.white,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          Color.fromRGBO(254, 159, 77, 1)),
+                      minHeight: 20,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 16),
+            // Map area with padding
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                  child: FlutterMap(
+                      mapController: _mapController,
+                      options: MapOptions(
+                        center: position ?? LatLng(0, 0),
+                        zoom: 13.0,
                       ),
-                      if (position != null)
-                        MarkerLayer(markers: [_createMyMarker(position!)]),
-                    ]))
+                      children: [
+                        TileLayer(
+                          urlTemplate:
+                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          tileProvider: NetworkTileProvider(),
+                          userAgentPackageName: 'com.example.app',
+                        ),
+                        if (position != null)
+                          MarkerLayer(markers: [_createMyMarker(position!)]),
+                      ]),
+                ),
+              ),
+            ),
+            // Bottom area for audio player
+            Container(
+              padding: EdgeInsets.all(16.0),
+              color: Colors.black.withOpacity(0.5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(Icons.play_arrow, color: Colors.white),
+                  Text(
+                    'Audio Player',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  CustomButton(
+                    children: [
+                      Text(
+                        'Pause',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    ],
+                    onPressed: () {
+                      // Your button press action
+                    },
+                  ),
+                  Icon(Icons.stop, color: Colors.white),
+                ],
+              ),
+            ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
-        tooltip: 'Start walking',
-        child: const Icon(Icons.play_arrow),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
   @override
   void dispose() {
-    super.dispose();
-    _mapController.dispose();
     subscription?.cancel();
+    _mapController.dispose();
+    super.dispose();
   }
 }
