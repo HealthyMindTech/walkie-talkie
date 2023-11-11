@@ -34,6 +34,8 @@ class _ExplorePageState extends State<ExplorePage> {
       GlobalKey<AudioPlayerWidgetState>();
   StreamSubscription? subscription;
   LatLng? position;
+  num distance = 0;
+  Timer? timer;
 
   WebSocketChannel? _webSocketChannel;
   bool userHasInteracted = false;
@@ -50,6 +52,15 @@ class _ExplorePageState extends State<ExplorePage> {
               Supabase.instance.client.storage.from('audio').getPublicUrl(path);
           audioPlayerKey.currentState!.addUrl(url);
           break;
+        case "distance":
+          final newDistance = decodedJson["distance"];
+          log.info("Received distance: $newDistance");
+          if (mounted) {
+            setState(() {
+              distance = newDistance;
+            });
+          }
+          break;
         default:
           log.info("Unknown message type: ${decodedJson["type"]}");
       }
@@ -58,12 +69,21 @@ class _ExplorePageState extends State<ExplorePage> {
     }
   }
 
+  void _runTimer(Timer _timer) {
+    log.info("Timer ran");
+
+    _webSocketChannel?.sink.add(jsonEncode({
+      "type": "distance",
+    }));
+  }
+
   @override
   void initState() {
     super.initState();
     _mapController = MapController();
     final token = Supabase.instance.client.auth.currentSession!.accessToken;
 
+    timer = Timer.periodic(const Duration(seconds: 10), _runTimer);
     Wakelock.enable();
 
     Backend().startWebsocket(token).then((webSocket) {
@@ -71,6 +91,7 @@ class _ExplorePageState extends State<ExplorePage> {
       _webSocketChannel = webSocket;
       _webSocketChannel?.stream.listen(_websocketListen);
     });
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _setPosition();
       _trackPosition();
@@ -261,7 +282,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '3.2 km walked', // Level display
+                                    '$distance m walked', // Level display
                                     style: const TextStyle(
                                       color: Color(0xFFfbfcf4),
                                       fontWeight: FontWeight.bold,
@@ -287,13 +308,14 @@ class _ExplorePageState extends State<ExplorePage> {
                                     Container(
                                       height: 10,
                                       decoration: BoxDecoration(
-                                        color: const Color(0xFFfbfcf4), // Background color of the bar
+                                        color: const Color(
+                                            0xFFfbfcf4), // Background color of the bar
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
                                     FractionallySizedBox(
-                                      widthFactor:
-                                          0.75, // Fraction of the bar filled with experience
+                                      widthFactor: distance /
+                                          4100, // Fraction of the bar filled with experience
                                       child: Container(
                                         height: 10,
                                         decoration: BoxDecoration(
@@ -332,7 +354,8 @@ class _ExplorePageState extends State<ExplorePage> {
                       child: FlutterMap(
                           mapController: _mapController,
                           options: MapOptions(
-                            center: position ?? const LatLng(60.162048, 24.9135104),
+                            center:
+                                position ?? const LatLng(60.162048, 24.9135104),
                             initialZoom: 13.0,
                           ),
                           children: [
@@ -379,7 +402,8 @@ class _ExplorePageState extends State<ExplorePage> {
                       setState(() {
                         userHasInteracted = true;
                       });
-                      audioPlayerKey.currentState?.startAudio(); // Call the method to start audio
+                      audioPlayerKey.currentState
+                          ?.startAudio(); // Call the method to start audio
                       // Optionally start the audio player here
                     },
                   ),
@@ -396,6 +420,7 @@ class _ExplorePageState extends State<ExplorePage> {
     subscription?.cancel();
     _mapController.dispose();
     _webSocketChannel?.sink.close();
+    timer?.cancel();
     Wakelock.disable();
     super.dispose();
   }

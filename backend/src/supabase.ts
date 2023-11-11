@@ -67,7 +67,7 @@ const getRecentCoordinates = async (walkId: string): Promise<Array<{
         .select('longitude, latitude, created_at')
         .eq('walk_id', walkId)
         .order('created_at', { ascending: false })
-        .limit(20);
+        .limit(10);
 
     if (error) {
         console.error(error, error.message);
@@ -84,6 +84,84 @@ const getRecentCoordinates = async (walkId: string): Promise<Array<{
     });
 }
 
+const getLastCoordinate = async (walkId: string): Promise<{
+    latitude: number, longitude: number
+}> => {
+    const { data, error } = await supabaseAdmin
+        .from('locations')
+        .select('longitude, latitude')
+        .eq('walk_id', walkId)
+        .order('created_at', { ascending: false })
+        .single()
+
+    if (error) {
+        console.error(error, error.message);
+        throw new Error(error.message);
+    }
+
+    return {
+        latitude: data.latitude,
+        longitude: data.longitude
+    }
+}
+
+const getFirstCoordinate = async (walkId: string): Promise<{
+    latitude: number, longitude: number
+}> => {
+    const { data, error } = await supabaseAdmin
+        .from('locations')
+        .select('longitude, latitude')
+        .eq('walk_id', walkId)
+        .order('created_at', { ascending: true })
+        .single()
+
+    if (error) {
+        console.error(error, error.message);
+        throw new Error(error.message);
+    }
+
+    return {
+        latitude: data.latitude,
+        longitude: data.longitude
+    }
+}
+
+const getLastDistance = async (walkId: string): Promise<{
+    latitude: number, longitude: number, distance: number
+} | null> => {
+    const { data, error } = await supabaseAdmin
+        .from('locations')
+        .select('longitude, latitude, distance')
+        .eq('walk_id', walkId)
+        .order('created_at', { ascending: false })
+        .single();
+
+    if (error) {
+        console.error(error, error.message);
+        return null;
+    }
+
+    return {
+        distance: data.distance,
+        latitude: data.latitude,
+        longitude: data.longitude
+    }
+}
+
+
+const writeDistance = async (walkId: string, userId: string, latitude: number, longitude: number, distance: number): Promise<void> => {
+    const { data, error } = await supabaseAdmin
+        .from('distance')
+        .insert([
+            { walk_id: walkId, user_id: userId, latitude: latitude, longitude: longitude, distance: distance },
+        ]);
+    if (error) {
+        console.log(`Error: ${error.message}`, error, data);
+        console.error(error.message);
+        throw new Error(error.message);
+    }
+}
+
 export {
     supabaseAnon,
     supabaseAdmin,
@@ -91,5 +169,9 @@ export {
     lookupUser,
     createWalk,
     saveBlobToStorage,
-    getRecentCoordinates
+    getRecentCoordinates,
+    getLastDistance,
+    getFirstCoordinate,
+    getLastCoordinate,
+    writeDistance
 };

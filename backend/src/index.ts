@@ -4,8 +4,8 @@ import * as WebSocket from 'ws';
 import { openai } from './openai';
 import { User } from '@supabase/supabase-js'
 import { runThreadAndGetTranscript } from './interactions';
-import { createWalk, addCoordinate, lookupUser, getRecentCoordinates } from './supabase';
-import { calculateBearing } from './bearings';
+import { createWalk, addCoordinate, lookupUser, getRecentCoordinates, getLastCoordinate, getFirstCoordinate, getLastDistance, writeDistance } from './supabase';
+import { calculateBearing, distance } from './bearings';
 const app = express();
 
 const server = http.createServer(app);
@@ -42,7 +42,6 @@ const webSocketHandler = (webSocket: WebSocket) => {
 
                 const path = await runThreadAndGetTranscript(threadId);
                 webSocket.send(JSON.stringify({ type: 'audio', path: path }));
-
             } else if (json.type === 'generate_new_chunk') {
                 if (threadId === null) {
                     return;
@@ -70,10 +69,15 @@ const webSocketHandler = (webSocket: WebSocket) => {
                             middleLocation.longitude,
                             recentLocation.latitude,
                             recentLocation.longitude);
+                        console.log("Initial bearing", initialBearing);
+                        console.log("Final bearing", finalBearing);
+                        console.log("Bearing change", finalBearing - initialBearing);
+
+
                         const bearingChange = finalBearing - initialBearing;
                         if (bearingChange > 45 && bearingChange <= 135) {
                             direction = 'right';
-                        } else if (bearingChange <= -45 && bearingChange >= -135) {
+                        } else if (bearingChange < -45 && bearingChange >= -135) {
                             direction = 'left';
                         } else {
                             direction = 'forward';
@@ -94,7 +98,6 @@ const webSocketHandler = (webSocket: WebSocket) => {
                     webSocket.send(JSON.stringify({ type: 'audio', path: path }));
                 }, 5000);
             } else if (json.type === 'location') {
-
                 if (user === null || threadId === null) {
                     console.error('User or threadId is null');
                     return;
@@ -106,6 +109,49 @@ const webSocketHandler = (webSocket: WebSocket) => {
                     longitude: location.longitude,
                     walkId: threadId
                 });
+            } else if (json.type === 'distance') {
+                if (user === null || threadId === null) {
+                    console.error('User or threadId is null');
+                    return;
+                }
+
+                try {
+                    const firstLocation = await getFirstCoordinate(threadId);
+                    if (firstLocation === null) {
+                        console.error('First location is null');
+                        return;
+                    }
+                    const lastLocation = await getLastCoordinate(threadId);
+                    if (firstLocation.longitude == lastLocation.longitude &&
+                        firstLocation.latitude == lastLocation.latitude) {
+                        return;
+                    }
+                    let recentDistance = await getLastDistance(threadId);
+
+                    if (recentDistance === null) {
+                        recentDistance = {
+                            latitude: firstLocation.latitude,
+                            longitude: firstLocation.longitude,
+                            distance: 0
+                        };
+                    }
+                    const addedDistance = distance(
+                        recentDistance.latitude,
+                        recentDistance.longitude,
+                        lastLocation.latitude,
+                        lastLocation.longitude);
+
+                    await writeDistance(
+                        threadId,
+                        user.id,
+                        lastLocation.latitude,
+                        lastLocation.longitude,
+                        addedDistance + recentDistance.distance);
+
+                    webSocket.send(JSON.stringify({ type: 'distance', distance: addedDistance + recentDistance.distance }));
+                } catch (e) {
+                    console.error(e);
+                }
             } else {
                 console.error(`Unknown message type: ${json.type}`);
             }
