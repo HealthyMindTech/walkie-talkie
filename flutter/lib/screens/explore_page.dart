@@ -208,7 +208,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                             Navigator.pop(context);
                                           }),
                                       Text(
-                                        'John the Chef', // Level display
+                                        'John the Chef',
                                         style: const TextStyle(
                                           color: Color(0xFFfbfcf4),
                                           fontWeight: FontWeight.bold,
