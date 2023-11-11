@@ -46,8 +46,8 @@ class _HomePageState extends State<HomePage> {
                         label: 'Name',
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.done,
-                        onFieldSubmitted: (value) {
-                        },
+                          onFieldSubmitted: (value) {
+                          },
                       ),
                     ],
                   )),
@@ -66,8 +66,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8), // Apply the same rounded corners to the clipper
-                  child: Image.asset(
-                    'background.png',
+                  child: Image.asset('background.png',
                     width: MediaQuery.of(context).size.width, // Force the image to take full width of the screen
                     fit: BoxFit.fitHeight, // Fit the width of the image to the container
                     // alignment: Alignment
@@ -76,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Container(
               // Center aligned
               alignment: Alignment.center,
@@ -99,12 +98,12 @@ class _HomePageState extends State<HomePage> {
                 ],
                 onPressed: () {
                   Navigator.pushNamed(context, '/explore', arguments: {
-                    'name': _nameController.text,
+                      'name': _nameController.text,
                   });
                 },
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
@@ -122,19 +121,19 @@ class _HomePageState extends State<HomePage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   LinearProgressIndicator(
                     value: 0.75, // Mock progress value
                     backgroundColor: Colors.grey[800],
-                    valueColor: AlwaysStoppedAnimation<Color>(
+                    valueColor: const AlwaysStoppedAnimation<Color>(
                       Colors.orange, // Orange progress bar
                     ),
                     minHeight: 10,
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Text(
                     '3.2 km walked - 4.1 km to next level',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white70,
                       fontSize: 16,
                     ),
