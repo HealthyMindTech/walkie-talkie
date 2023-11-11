@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
               flex: 1,
               // This should wrap the ListView
               child: Container(
-                  padding: EdgeInsets.fromLTRB(12, 12, 148, 16),
+                  padding: EdgeInsets.fromLTRB(12, 12, 12, 16),
                   child: ListView(
                     children: [
                       CustomInput(
@@ -67,16 +67,16 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(
-                      10), // Apply the same rounded corners to the clipper
+                      8), // Apply the same rounded corners to the clipper
                   child: Image.asset(
-                    'assets/character.png',
+                    'background.png',
                     width: MediaQuery.of(context)
                         .size
                         .width, // Force the image to take full width of the screen
                     fit: BoxFit
-                        .fitWidth, // Fit the width of the image to the container
-                    alignment: Alignment
-                        .topCenter, // Align the image to the top of the container
+                        .fitHeight, // Fit the width of the image to the container
+                    // alignment: Alignment
+                    //     .topCenter, // Align the image to the top of the container
                   ),
                 ),
               ),
@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                   )
                 ],
                 onPressed: () {
-                  // Navigate to the explore page
+                  Navigator.pushNamed(context, '/explore');
                 },
               ),
             ),
@@ -186,7 +186,7 @@ class CustomInput extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: 16), // Space between label and text field
+          // SizedBox(width: 16), // Space between label and text field
           Expanded(
             flex: 5, // Increase the flex of text field to give it more space
             child: TextFormField(
@@ -197,7 +197,7 @@ class CustomInput extends StatelessWidget {
               style: const TextStyle(
                 color: Colors.black, // Text color
                 fontWeight: FontWeight.bold,
-                fontSize: 18,
+                fontSize: 22,
               ),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(
@@ -225,6 +225,12 @@ class CustomInput extends StatelessWidget {
               maxLength: 20, // Limit characters to 20
             ),
           ),
+          SizedBox(width: 16), // Space between label and text field
+          CustomButton(
+              children: [Icon(Icons.casino, color: Colors.white, size: 32)],
+              onPressed: () {
+                // Navigate to the explore page
+              })
         ],
       ),
     );

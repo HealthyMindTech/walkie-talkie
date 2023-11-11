@@ -7,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:logging/logging.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:stroke_text/stroke_text.dart';
 
 import '../geolocator.dart';
 import '../widgets/geometry.dart';
@@ -193,19 +194,19 @@ class _ExplorePageState extends State<ExplorePage> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       CustomButton(
-                                        children: [
-                                          // Character icon
-                                          const Icon(
-                                            Icons.arrow_back,
-                                            color: Colors.white,
-                                          ),
-                                        ],
-                                        onPressed:
-                                            () {
-                                              audioPlayerKey.currentState?.audioPlayer.stop();
-                                              Navigator.pop(context);
-                                            }
-                                      ),
+                                          children: [
+                                            // Character icon
+                                            const Icon(
+                                              Icons.arrow_back,
+                                              color: Colors.white,
+                                            ),
+                                          ],
+                                          onPressed: () {
+                                            audioPlayerKey
+                                                .currentState?.audioPlayer
+                                                .stop();
+                                            Navigator.pop(context);
+                                          }),
                                       RichText(
                                         textAlign: TextAlign.center,
                                         text: TextSpan(
@@ -393,12 +394,15 @@ class _ExplorePageState extends State<ExplorePage> {
                         color: Colors.white,
                       ),
                       const SizedBox(width: 8),
-                      const Text(
-                        'Start Listening',
-                        style: TextStyle(
+                      const StrokeText(
+                        text: "Start Listening!",
+                        textStyle: TextStyle(
+                          fontSize: 28,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
+                        // strokeColor: Colors.black,
+                        strokeWidth: 2,
                       ),
                     ],
                     onPressed: () {
