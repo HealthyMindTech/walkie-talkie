@@ -9,11 +9,11 @@ const supabaseAdmin = createClient(
     'https://rwlnvnijfocuqumwkgmv.supabase.co',
     '<YOUR SUPABASE ADMIN KEY>')
 
-const addCoordinate = async ({ userId, latitude, longitude }: { userId: string, latitude: number, longitude: number }) => {
+const addCoordinate = async ({ userId, latitude, longitude, walkId }: { walkId: string, userId: string, latitude: number, longitude: number }) => {
     const { data, error } = await supabaseAdmin
         .from('locations')
         .insert([
-            { user_id: userId, location: `POINT(${latitude} ${longitude})` },
+            { walk_id: walkId, user_id: userId, location: `POINT(${latitude} ${longitude})` },
         ]);
     if (error) {
         console.log(`Error: ${error.message}`, error, data);

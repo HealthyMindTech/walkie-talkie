@@ -83,6 +83,13 @@ class _ExplorePageState extends State<ExplorePage> {
             size: Size(width, height), color: Colors.purple));
   }
 
+  void _onAudioEnd() {
+    log.info("Audio ended");
+    _webSocketChannel?.sink.add(jsonEncode({
+      "type": "generate_new_chunk",
+    }));
+  }
+
   void _sendPosition(Position position) {
     _webSocketChannel?.sink.add(jsonEncode({
       "type": "location",
@@ -333,12 +340,13 @@ class _ExplorePageState extends State<ExplorePage> {
               ),
             ),
             // Bottom area for audio player
-            AudioPlayerWidget(key: audioPlayerKey)
+            AudioPlayerWidget(key: audioPlayerKey, onEndOfAudio: _onAudioEnd)
           ],
         ),
       ),
     );
   }
+
 
   @override
   void dispose() {

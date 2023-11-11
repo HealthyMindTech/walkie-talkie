@@ -29,6 +29,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
         await audioPlayer.seek(const Duration(seconds: 0));
         await audioPlayer.play();
       }
+    }
   }
 
   @override

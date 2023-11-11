@@ -59,16 +59,16 @@ const webSocketHandler = (webSocket: WebSocket) => {
 
             } else if (json.type === 'location') {
 
-                if (user === null) {
-                    console.error('User is null');
+                if (user === null || threadId === null) {
+                    console.error('User or threadId is null');
                     return;
                 }
                 const location = json.location;
                 await addCoordinate({
-                    userId: user!.id,
+                    userId: user.id,
                     latitude: location.latitude,
                     longitude: location.longitude,
-                    walk: threadId
+                    walkId: threadId
                 });
             } else {
                 console.error(`Unknown message type: ${json.type}`);
