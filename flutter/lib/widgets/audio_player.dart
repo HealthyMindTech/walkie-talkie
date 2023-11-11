@@ -50,7 +50,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
 
   void _playChimes() async {
     isPlayingChimes = true;
-    await audioPlayer.setUrl('assets/chimes.mp3');
+    await audioPlayer.setAsset('assets/chimes.mp3');
     await audioPlayer.play();
     debugPrint('Playing chimes');
   }
