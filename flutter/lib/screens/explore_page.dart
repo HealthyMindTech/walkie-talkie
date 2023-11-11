@@ -38,7 +38,7 @@ class CustomButton extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         padding: EdgeInsets.symmetric(
-            horizontal: 10.0, vertical: 6.0), // Increased vertical padding
+            horizontal: 10.0, vertical: 8.0), // Increased vertical padding
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFFf8c85c), Color(0xFFfc8c3e)], // Orange gradient
