@@ -3,7 +3,9 @@ import 'package:logging/logging.dart';
 import 'package:just_audio/just_audio.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
-  const AudioPlayerWidget({super.key});
+  final void Function() onEndOfAudio;
+
+  const AudioPlayerWidget({super.key, required this.onEndOfAudio});
 
   @override
   State<AudioPlayerWidget> createState() => AudioPlayerWidgetState();
@@ -15,20 +17,30 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   int currentUrlIndex = -1;
   late AudioPlayer audioPlayer;
   bool isPaused = true;
+  bool isPlayingChimes = false;
+
+  void _onAudioPlayerListener(PlayerState event) async {
+    if (event.processingState == ProcessingState.completed) {
+      if (!isPlayingChimes) {
+        isPlayingChimes = true;
+        widget.onEndOfAudio();
+        await audioPlayer.setUrl('assets/chimes.mp3');
+      } else {
+        await audioPlayer.seek(const Duration(seconds: 0));
+        await audioPlayer.play();
+      }
+  }
 
   @override
   void initState() {
     super.initState();
     audioPlayer = AudioPlayer();
-    if (urls.isNotEmpty) {
-      _playNextFile();
-    }
+    audioPlayer.playerStateStream.listen(_onAudioPlayerListener);
   }
 
-  void _playNextFile() {
+  void _nextFile() {
     if (currentUrlIndex < urls.length - 1) {
       currentUrlIndex++;
-      _play();
     }
   }
 
@@ -40,12 +52,26 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     await audioPlayer.play();
   }
 
+  void _playOrPause() async {
+    if (isPaused) {
+      if (currentUrlIndex == -1) {
+        _nextFile();
+      }
+      _play();
+      setState(() {
+        isPaused = false;
+      });
+    } else {
+      await audioPlayer.pause();
+      setState(() {
+        isPaused = true;
+      });
+    }
+  }
+
   void addUrl(String url) {
     log.info('Adding url: $url');
     urls.add(url);
-    if (currentUrlIndex == -1) {
-      _playNextFile();
-    }
 
     setState(() {});
   }
@@ -58,8 +84,12 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            if (urls.isNotEmpty) const Icon(Icons.play_arrow, color: Colors.white) else Container(),
-
+            if (urls.isNotEmpty)
+              IconButton(
+                  onPressed: _playOrPause,
+                  icon: isPaused
+                      ? const Icon(Icons.play_arrow, color: Colors.white)
+                      : const Icon(Icons.pause, color: Colors.white)),
             const Text(
               'Audio Player',
               style: TextStyle(color: Colors.white),

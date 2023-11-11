@@ -52,9 +52,9 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Spacer(), // Pushes all children towards the ends
-                GoExploreButton(), // 'Go Explore!' button
-                StatsWidget(), // Stats widget
+                const Spacer(), // Pushes all children towards the ends
+                const GoExploreButton(), // 'Go Explore!' button
+                const StatsWidget(), // Stats widget
               ],
             ),
           ],
