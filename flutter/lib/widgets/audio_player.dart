@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:logging/logging.dart';
-import '../widgets/custom_button.dart';
+import 'package:just_audio/just_audio.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
   const AudioPlayerWidget({super.key});
@@ -33,8 +32,12 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     }
   }
 
-  void _play() {
-    audioPlayer.play(UrlSource(urls[currentUrlIndex]));
+  void _play() async {
+    if (currentUrlIndex == -1 || currentUrlIndex >= urls.length) {
+      return;
+    }
+    await audioPlayer.setUrl(urls[currentUrlIndex]);
+    await audioPlayer.play();
   }
 
   void addUrl(String url) {
@@ -53,28 +56,14 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
         padding: const EdgeInsets.all(16.0),
         color: Colors.black.withOpacity(0.5),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Icon(Icons.play_arrow, color: Colors.white),
+            if (urls.isNotEmpty) const Icon(Icons.play_arrow, color: Colors.white) else Container(),
+
             const Text(
               'Audio Player',
               style: TextStyle(color: Colors.white),
             ),
-            CustomButton(
-              children: [
-                Text(
-                  'Pause',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              ],
-              onPressed: () {
-                // Your button press action
-              },
-            ),
-            const Icon(Icons.stop, color: Colors.white),
           ],
         ));
   }

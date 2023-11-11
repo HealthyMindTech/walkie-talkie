@@ -46,6 +46,7 @@ dependencies:
   flutter_map_cancellable_tile_provider: ^1.0.0
   web_socket_channel: ^2.4.0
   audioplayers: ^5.2.0
+  just_audio: ^0.9.35
 
 dev_dependencies:
   flutter_test:
