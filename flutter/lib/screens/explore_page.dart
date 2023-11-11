@@ -207,37 +207,12 @@ class _ExplorePageState extends State<ExplorePage> {
                                                 .stop();
                                             Navigator.pop(context);
                                           }),
-                                      RichText(
-                                        textAlign: TextAlign.center,
-                                        text: TextSpan(
-                                          style: DefaultTextStyle.of(context)
-                                              .style,
-                                          children: <TextSpan>[
-                                            TextSpan(
-                                              text: 'John ',
-                                              style: TextStyle(
-                                                fontSize: 26.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: const Color(0xFFfbfcf4),
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: 'the ',
-                                              style: TextStyle(
-                                                fontSize: 26.0,
-                                                fontWeight: FontWeight.normal,
-                                                color: const Color(0xFFfbfcf4),
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: 'Chef',
-                                              style: TextStyle(
-                                                fontSize: 26.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: const Color(0xFFfbfcf4),
-                                              ),
-                                            ),
-                                          ],
+                                      Text(
+                                        'John the Chef', // Level display
+                                        style: const TextStyle(
+                                          color: Color(0xFFfbfcf4),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 26,
                                         ),
                                       ),
                                       CustomButton(
