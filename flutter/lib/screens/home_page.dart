@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8), // Apply the same rounded corners to the clipper
-                  child: Image.asset('background.png',
+                  child: Image.asset('assets/background.png',
                     width: MediaQuery.of(context).size.width, // Force the image to take full width of the screen
                     fit: BoxFit.fitHeight, // Fit the width of the image to the container
                     // alignment: Alignment
@@ -320,4 +320,3 @@ String getRandomNameProfession() {
 
   return '$name the $profession';
 }
-
