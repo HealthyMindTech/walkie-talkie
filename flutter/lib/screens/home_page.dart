@@ -34,20 +34,15 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: Column(
           children: [
-            Expanded(
-              flex: 1,
-              // This should wrap the ListView
-              child: Container(
-                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 16),
-                  child: CustomInput(
-                        controller: _nameController,
-                        label: 'Name',
-                        keyboardType: TextInputType.text,
-                        textInputAction: TextInputAction.done,
-                        onFieldSubmitted: (value) {
-                        },
-                      ),
-                  ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(12, 12, 12, 16),
+              child: CustomInput(
+                controller: _nameController,
+                label: 'Name',
+                keyboardType: TextInputType.text,
+                textInputAction: TextInputAction.done,
+                onFieldSubmitted: (value) {},
+              ),
             ),
             Expanded(
               flex: 4, // Adjust the flex factor as needed
@@ -59,13 +54,19 @@ class _HomePageState extends State<HomePage> {
                     color: const Color(0xFFfc8c3e),
                     width: 3,
                   ),
-                  borderRadius: BorderRadius.circular(10), // Rounded corners for the container
+                  borderRadius: BorderRadius.circular(
+                      10), // Rounded corners for the container
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8), // Apply the same rounded corners to the clipper
-                  child: Image.asset('assets/background.png',
-                    width: MediaQuery.of(context).size.width, // Force the image to take full width of the screen
-                    fit: BoxFit.fitHeight, // Fit the width of the image to the container
+                  borderRadius: BorderRadius.circular(
+                      8), // Apply the same rounded corners to the clipper
+                  child: Image.asset(
+                    'assets/background.png',
+                    width: MediaQuery.of(context)
+                        .size
+                        .width, // Force the image to take full width of the screen
+                    fit: BoxFit
+                        .fitHeight, // Fit the width of the image to the container
                     // alignment: Alignment
                     //     .topCenter, // Align the image to the top of the container
                   ),
@@ -95,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                 ],
                 onPressed: () {
                   Navigator.pushNamed(context, '/explore', arguments: {
-                      'name': _nameController.text,
+                    'name': _nameController.text,
                   });
                 },
               ),
@@ -168,19 +169,15 @@ class CustomInput extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0), // Vertical padding
       child: Row(
         children: [
-          Expanded(
-            flex:
-                1, // Adjust the ratio of label width to text field width as needed
-            child: Text(
-              label,
-              style: const TextStyle(
-                color: Colors.white, // Label color
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white, // Label color
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
             ),
           ),
-          // SizedBox(width: 16), // Space between label and text field
+          SizedBox(width: 16), // Space between label and text field
           Expanded(
             flex: 5, // Increase the flex of text field to give it more space
             child: TextFormField(
@@ -191,7 +188,7 @@ class CustomInput extends StatelessWidget {
               style: const TextStyle(
                 color: Colors.black, // Text color
                 fontWeight: FontWeight.bold,
-                fontSize: 22,
+                fontSize: 20,
               ),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(
@@ -221,7 +218,9 @@ class CustomInput extends StatelessWidget {
           ),
           const SizedBox(width: 16), // Space between label and text field
           CustomButton(
-              children: const [Icon(Icons.casino, color: Colors.white, size: 32)],
+              children: const [
+                Icon(Icons.casino, color: Colors.white, size: 32)
+              ],
               onPressed: () {
                 controller.text = getRandomNameProfession();
               })
