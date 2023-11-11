@@ -19,24 +19,34 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   bool isPaused = true;
   bool isPlayingChimes = false;
 
-  void _onAudioPlayerListener(PlayerState event) async {
-    if (event.processingState == ProcessingState.completed) {
-      if (!isPlayingChimes) {
-        isPlayingChimes = true;
-        widget.onEndOfAudio();
-        await audioPlayer.setUrl('assets/chimes.mp3');
-      } else {
-        await audioPlayer.seek(const Duration(seconds: 0));
-        await audioPlayer.play();
-      }
-    }
-  }
-
   @override
   void initState() {
     super.initState();
     audioPlayer = AudioPlayer();
     audioPlayer.playerStateStream.listen(_onAudioPlayerListener);
+
+    // Play chimes initially
+    _playChimes();
+  }
+
+  void _onAudioPlayerListener(PlayerState event) async {
+    if (event.processingState == ProcessingState.completed) {
+      if (!isPlayingChimes) {
+        _playChimes();
+      }
+    }
+  }
+
+  void _playChimes() async {
+    isPlayingChimes = true;
+    await audioPlayer.setUrl('assets/chimes.mp3');
+    await audioPlayer.play();
+    debugPrint('Playing chimes');
+  }
+
+  void _handleEndOfChimes() {
+    // Handle what should happen after chimes have played.
+    // For example, move to next file or something else.
   }
 
   void _nextFile() {
@@ -49,6 +59,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     if (currentUrlIndex == -1 || currentUrlIndex >= urls.length) {
       return;
     }
+    isPlayingChimes = false; // Ensure chimes are not considered playing
     await audioPlayer.setUrl(urls[currentUrlIndex]);
     await audioPlayer.play();
   }
@@ -73,6 +84,13 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   void addUrl(String url) {
     log.info('Adding url: $url');
     urls.add(url);
+
+    // Stop chimes and play the new file immediately
+    if (isPlayingChimes) {
+      isPlayingChimes = false;
+      currentUrlIndex = urls.length - 1; // Set the index to the new file
+      _play(); // Play the new file
+    }
 
     setState(() {});
   }
