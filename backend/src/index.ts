@@ -11,10 +11,12 @@ const app = express();
 const server = http.createServer(app);
 const webSocketServer = new WebSocket.Server({ server });
 
+const VOICES: Array<'alloy' | 'echo' | 'fable' | 'onyx' | 'nova' | 'shimmer'> = ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'];
+
 const webSocketHandler = (webSocket: WebSocket) => {
     let user: User | null = null;
     let threadId: string | null = null;
-
+    let voice: 'alloy' | 'echo' | 'fable' | 'onyx' | 'nova' | 'shimmer' | null;
     webSocket.on('message', async (message: string) => {
         let json: any;
         try {
@@ -27,7 +29,6 @@ const webSocketHandler = (webSocket: WebSocket) => {
         try {
             if (json.type === 'login') {
                 const token = json.token;
-                const storyStart = json.storyStart;
                 user = await lookupUser({ token: token });
 
                 const explorerName = json.explorerName || user!.user_metadata.full_name;
@@ -39,9 +40,10 @@ const webSocketHandler = (webSocket: WebSocket) => {
                     }]
                 });
                 threadId = thread.id;
+                voice = VOICES[Math.floor(Math.random() * VOICES.length)];
                 await createWalk({ userId: user!.id, threadId: threadId });
 
-                const path = await runThreadAndGetTranscript(threadId);
+                const path = await runThreadAndGetTranscript(threadId, voice);
                 webSocket.send(JSON.stringify({ type: 'audio', path: path }));
             } else if (json.type === 'generate_new_chunk') {
                 if (threadId === null) {
@@ -95,7 +97,7 @@ const webSocketHandler = (webSocket: WebSocket) => {
                         role: 'user',
                     });
 
-                    const path = await runThreadAndGetTranscript(threadId);
+                    const path = await runThreadAndGetTranscript(threadId, voice!);
                     webSocket.send(JSON.stringify({ type: 'audio', path: path }));
                 }, 5000);
             } else if (json.type === 'location') {

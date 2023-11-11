@@ -25,10 +25,10 @@ const waitForRun = async (threadId: string, runId: string): Promise<string> => {
 }
 
 
-const doTranscription = async (text: string): Promise<ArrayBuffer> => {
+const doTranscription = async (text: string, voice: 'alloy' | 'echo' | 'fable' | 'onyx' | 'nova' | 'shimmer'): Promise<ArrayBuffer> => {
     const resp = await openai.audio.speech.create({
         model: "tts-1",
-        voice: "shimmer",
+        voice: voice,
         input: text,
     });
 
