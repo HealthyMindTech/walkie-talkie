@@ -29,7 +29,7 @@ class _ExplorePageState extends State<ExplorePage> {
   static final log = Logger('_ExplorePageState');
   late MapController _mapController;
   late Stream<Position>? posStream;
-  final Key audioPlayerKey = GlobalKey<AudioPlayerState>();
+  final Key audioPlayerKey = GlobalKey<AudioPlayerWidgetState>();
   StreamSubscription? subscription;
   LatLng? position;
 
@@ -332,7 +332,7 @@ class _ExplorePageState extends State<ExplorePage> {
               ),
             ),
             // Bottom area for audio player
-            AudioPlayer(key: audioPlayerKey)
+            AudioPlayerWidget(key: audioPlayerKey)
           ],
         ),
       ),

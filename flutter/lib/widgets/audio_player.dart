@@ -1,24 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:logging/logging.dart';
 import '../widgets/custom_button.dart';
 
-class AudioPlayer extends StatefulWidget {
-  const AudioPlayer({super.key});
+class AudioPlayerWidget extends StatefulWidget {
+  const AudioPlayerWidget({super.key});
 
   @override
-  State<AudioPlayer> createState() => AudioPlayerState();
+  State<AudioPlayerWidget> createState() => AudioPlayerWidgetState();
 }
 
-class AudioPlayerState extends State<AudioPlayer> {
+class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
+  static final log = Logger('AudioPlayerWidgetState');
   List<String> urls = [];
   int currentUrlIndex = -1;
+  late AudioPlayer audioPlayer;
+  bool isPaused = true;
+
+  @override
+  void initState() {
+    super.initState();
+    audioPlayer = AudioPlayer();
+    if (urls.isNotEmpty) {
+      _playNextFile();
+    }
+  }
+
+  void _playNextFile() {
+    if (currentUrlIndex < urls.length - 1) {
+      currentUrlIndex++;
+      _play();
+    }
+  }
+
+  void _play() {
+    audioPlayer.play(UrlSource(urls[currentUrlIndex]));
+  }
 
   void addUrl(String url) {
-    setState(() {
-      urls.add(url);
-      if (currentUrlIndex == -1) {
-        currentUrlIndex = 0;
-      }
-    });
+    log.info('Adding url: $url');
+    urls.add(url);
+    if (currentUrlIndex == -1) {
+      _playNextFile();
+    }
+
+    setState(() {});
   }
 
   @override
