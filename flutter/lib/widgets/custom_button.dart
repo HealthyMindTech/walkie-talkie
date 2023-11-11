@@ -26,20 +26,34 @@ class _CustomButtonState extends State<CustomButton> {
   }
 
   Future<void> _loadSound() async {
-    // Pre-load the sound file (replace with your asset)
-    await _audioPlayer.setAsset('assets/tap.mp3');
+    try {
+      await _audioPlayer.setAsset('assets/tap.mp3');
+      // Set a flag here to indicate the sound is ready
+    } catch (e) {
+      debugPrint('Error loading sound: $e');
+      // Optionally reinitialize the AudioPlayer here
+    }
   }
 
-  void _playSound() async {
-    await _audioPlayer.setAsset('assets/tap.mp3');
-    await _audioPlayer.play(); // Play the loaded sound
+  Future<void> _playSound() async {
+    if (_audioPlayer.playing) {
+      await _audioPlayer
+          .stop(); // Ensure the player is stopped before playing again
+    }
+    try {
+      await _audioPlayer.play(); // Play the loaded sound
+    } catch (e) {
+      debugPrint('Error playing sound: $e');
+      // Handle the error, possibly reinitialize the AudioPlayer
+    }
   }
 
-  void _onTapDown(TapDownDetails details) {
+  Future<void> _onTapDown(TapDownDetails details) async {
     setState(() {
       _isPressed = true;
     });
-    _playSound(); // Play sound on button press
+    await _audioPlayer.seek(const Duration()); // Restart the sound
+    await _playSound(); // Play sound on button press
   }
 
   void _onTapUp(TapUpDetails details) {
@@ -64,7 +78,7 @@ class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: _onTapDown,
+      onTapDown: (details) async => await _onTapDown(details),
       onTapUp: _onTapUp,
       onTapCancel: _onTapCancel,
       onTap: widget.onPressed,

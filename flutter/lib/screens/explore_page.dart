@@ -230,7 +230,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                         // Level indicator
                                         children: [
                                           Text(
-                                            'lvl 5',
+                                            'lvl 1',
                                             style: const TextStyle(
                                               color: Color(0xFFfbfcf4),
                                               fontWeight: FontWeight.bold,

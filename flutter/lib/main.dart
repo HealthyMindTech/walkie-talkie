@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
         return LayoutBuilder(
           builder: (context, constraints) {
             const maxWidth =
-                500.0; // Set the max width for a 'mobile-like' view
+                400.0; // Set the max width for a 'mobile-like' view
             final isDesktop = MediaQuery.of(context).size.width > maxWidth;
             if (isDesktop) {
               // If the screen width is larger than maxWidth, constrain the child's width
