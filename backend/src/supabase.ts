@@ -47,7 +47,10 @@ const lookupUser = async ({ token }: { token: string }): Promise<User> => {
 const saveBlobToStorage = async ({ blob, fileName }: { blob: ArrayBuffer, fileName: string }) => {
     const { data, error } = await supabaseAdmin.storage
         .from('audio')
-        .upload(fileName, blob);
+        .upload(fileName, blob, {
+            contentType: 'audio/mpeg'
+        });
+
 
     if (error) {
         console.error(error, error.message);

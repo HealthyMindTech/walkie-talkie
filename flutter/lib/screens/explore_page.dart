@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../widgets/audio_player.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -29,11 +29,13 @@ class _ExplorePageState extends State<ExplorePage> {
   static final log = Logger('_ExplorePageState');
   late MapController _mapController;
   late Stream<Position>? posStream;
+  final Key audioPlayerKey = GlobalKey<AudioPlayerState>();
   StreamSubscription? subscription;
   LatLng? position;
+
   WebSocketChannel? _webSocketChannel;
 
-  void _websocketListen(dynamic event) {
+  void _websocketListen(dynamic event) async {
     try {
       final decodedJson = jsonDecode(event);
 
@@ -41,6 +43,7 @@ class _ExplorePageState extends State<ExplorePage> {
         case "audio":
           final path = decodedJson["path"];
           log.info("Received audio: $path");
+          final url = Supabase.instance.client.storage.from('audio').getPublicUrl(path);
           break;
         default:
           log.info("Unknown message type: ${decodedJson["type"]}");
@@ -128,14 +131,14 @@ class _ExplorePageState extends State<ExplorePage> {
           children: [
             // Top area with character name and progress bar
             Container(
-              padding: EdgeInsets.all(16.0),
-              color: Color.fromRGBO(36, 58, 47, 1),
+              padding: const EdgeInsets.all(16.0),
+              color: const Color.fromRGBO(36, 58, 47, 1),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     padding:
-                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                     color: Color.fromRGBO(36, 58, 47, 1),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -148,16 +151,15 @@ class _ExplorePageState extends State<ExplorePage> {
                                 height: 2.0,
                                 color: Color(0xFFfbfcf4),
                               ),
-                              SizedBox(height: 2),
+                              const SizedBox(height: 2),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   CustomButton(
                                     // Level indicator
                                     children: [
                                       // Character icon
-                                      Icon(
+                                      const Icon(
                                         Icons.person,
                                         color: Colors.white,
                                       ),
@@ -304,7 +306,7 @@ class _ExplorePageState extends State<ExplorePage> {
             // Map area with padding
             Expanded(
               child: Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -313,7 +315,7 @@ class _ExplorePageState extends State<ExplorePage> {
                   child: FlutterMap(
                       mapController: _mapController,
                       options: MapOptions(
-                        center: position ?? LatLng(0, 0),
+                        center: position ?? const LatLng(0, 0),
                         zoom: 13.0,
                       ),
                       children: [
@@ -330,35 +332,7 @@ class _ExplorePageState extends State<ExplorePage> {
               ),
             ),
             // Bottom area for audio player
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              color: Colors.black.withOpacity(0.5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(Icons.play_arrow, color: Colors.white),
-                  Text(
-                    'Audio Player',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  CustomButton(
-                    children: [
-                      Text(
-                        'Pause',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    ],
-                    onPressed: () {
-                      // Your button press action
-                    },
-                  ),
-                  Icon(Icons.stop, color: Colors.white),
-                ],
-              ),
-            ),
+            AudioPlayer(key: audioPlayerKey)
           ],
         ),
       ),
