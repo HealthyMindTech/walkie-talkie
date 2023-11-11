@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:logging/logging.dart';
+
 import '../geolocator.dart';
 import '../widgets/geometry.dart';
+
+import '../widgets/custom_button.dart';
 import '../services/backend.dart';
-import 'login_screen.dart';
-import 'package:logging/logging.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+
 import 'dart:convert';
+import 'dart:async';
 
 class ExplorePage extends StatefulWidget {
   final String title;
@@ -21,59 +25,30 @@ class ExplorePage extends StatefulWidget {
   State<ExplorePage> createState() => _ExplorePageState();
 }
 
-class CustomButton extends StatelessWidget {
-  // Add children and onPressed to your properties
-  final List<Widget>? children;
-  final VoidCallback onPressed;
-
-  const CustomButton({
-    Key? key,
-    required this.children,
-    required this.onPressed,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        padding: EdgeInsets.symmetric(
-            horizontal: 10.0, vertical: 8.0), // Increased vertical padding
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFFf8c85c), Color(0xFFfc8c3e)], // Orange gradient
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.25),
-              offset: Offset(0, 4),
-              blurRadius: 4.0,
-            ),
-          ],
-          borderRadius: BorderRadius.circular(10.0), // Slightly rounded corners
-          border: Border.all(
-            color: Color(0xFFae3d0b), // Adjusted for a darker border color
-            width: 2.0,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: children!,
-        ),
-      ),
-    );
-  }
-}
-
 class _ExplorePageState extends State<ExplorePage> {
+  static final log = Logger('_ExplorePageState');
   late MapController _mapController;
   late Stream<Position>? posStream;
   StreamSubscription? subscription;
   LatLng? position;
   WebSocketChannel? _webSocketChannel;
-  static final log = Logger("_MyHomePageState");
+
+  void _websocketListen(dynamic event) {
+    try {
+      final decodedJson = jsonDecode(event);
+
+      switch (decodedJson["type"]) {
+        case "audio":
+          final path = decodedJson["path"];
+          log.info("Received audio: $path");
+          break;
+        default:
+          log.info("Unknown message type: ${decodedJson["type"]}");
+      }
+    } catch (e) {
+      log.warning("Error decoding json: $e");
+    }
+  }
 
   @override
   void initState() {
@@ -84,6 +59,7 @@ class _ExplorePageState extends State<ExplorePage> {
     Backend().startWebsocket(token).then((webSocket) {
       log.info("websocket: $webSocket");
       _webSocketChannel = webSocket;
+      _webSocketChannel?.stream.listen(_websocketListen);
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _setPosition();
@@ -146,7 +122,7 @@ class _ExplorePageState extends State<ExplorePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-          Color.fromRGBO(36, 58, 47, 1), // Set the background color
+          const Color.fromRGBO(36, 58, 47, 1), // Set the background color
       body: SafeArea(
         child: Column(
           children: [
@@ -292,7 +268,8 @@ class _ExplorePageState extends State<ExplorePage> {
                                 Container(
                                   height: 10,
                                   decoration: BoxDecoration(
-                                    color: Color(0xFFfbfcf4), // Background color of the bar
+                                    color: Color(
+                                        0xFFfbfcf4), // Background color of the bar
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
@@ -306,7 +283,8 @@ class _ExplorePageState extends State<ExplorePage> {
                                         begin: Alignment.centerLeft,
                                         end: Alignment.centerRight,
                                         colors: [
-                                          Color(0xFFf8c85c), Color(0xFFfc8c3e)
+                                          Color(0xFFf8c85c),
+                                          Color(0xFFfc8c3e)
                                         ],
                                       ),
                                       borderRadius: BorderRadius.circular(10),
@@ -353,7 +331,7 @@ class _ExplorePageState extends State<ExplorePage> {
             ),
             // Bottom area for audio player
             Container(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               color: Colors.black.withOpacity(0.5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -391,6 +369,7 @@ class _ExplorePageState extends State<ExplorePage> {
   void dispose() {
     subscription?.cancel();
     _mapController.dispose();
+    _webSocketChannel?.sink.close();
     super.dispose();
   }
 }
