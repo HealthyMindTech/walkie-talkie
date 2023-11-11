@@ -29,7 +29,7 @@ class _ExplorePageState extends State<ExplorePage> {
   static final log = Logger('_ExplorePageState');
   late MapController _mapController;
   late Stream<Position>? posStream;
-  final Key audioPlayerKey = GlobalKey<AudioPlayerWidgetState>();
+  final GlobalKey<AudioPlayerWidgetState> audioPlayerKey = GlobalKey<AudioPlayerWidgetState>();
   StreamSubscription? subscription;
   LatLng? position;
 
@@ -44,6 +44,7 @@ class _ExplorePageState extends State<ExplorePage> {
           final path = decodedJson["path"];
           log.info("Received audio: $path");
           final url = Supabase.instance.client.storage.from('audio').getPublicUrl(path);
+          audioPlayerKey.currentState!.addUrl(url);
           break;
         default:
           log.info("Unknown message type: ${decodedJson["type"]}");
