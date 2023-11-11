@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import { ThreadMessagesPage } from 'openai/resources/beta/threads/messages';
 
-const assistantId = 'asst_EMkAqBVDL1f0ZbHRaLCAzPE7';
+const assistantId = 'asst_upQ8sxXqINuTJEsLsOWaWUAh';
 
 const openai = new OpenAI({ apiKey: '<YOUR OPENAI API KEY>' });
 
