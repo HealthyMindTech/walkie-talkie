@@ -282,7 +282,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '${(distance / 100).round() / 10} km walked', // Level display
+                                    '${(distance / 1000).toStringAsFixed(1)} km walked', // Level display
                                     style: const TextStyle(
                                       color: Color(0xFFfbfcf4),
                                       fontWeight: FontWeight.bold,
