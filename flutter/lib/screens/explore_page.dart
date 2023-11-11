@@ -209,14 +209,20 @@ class _ExplorePageState extends State<ExplorePage> {
                                                 .stop();
                                             Navigator.pop(context);
                                           }),
-                                      FittedBox(
-                                        fit: BoxFit.fitWidth,
-                                        child: Text(
-                                          widget.explorerName,
-                                          style: const TextStyle(
-                                            color: Color(0xFFfbfcf4),
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 22,
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16.0),
+                                          child: FittedBox(
+                                            fit: BoxFit.fitWidth,
+                                            child: Text(
+                                              widget.explorerName,
+                                              style: const TextStyle(
+                                                color: Color(0xFFfbfcf4),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 22,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),

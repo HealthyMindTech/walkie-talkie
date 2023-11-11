@@ -188,7 +188,7 @@ class CustomInput extends StatelessWidget {
               style: const TextStyle(
                 color: Colors.black, // Text color
                 fontWeight: FontWeight.bold,
-                fontSize: 20,
+                fontSize: 18,
               ),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(
