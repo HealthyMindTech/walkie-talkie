@@ -59,4 +59,36 @@ const saveBlobToStorage = async ({ blob, fileName }: { blob: ArrayBuffer, fileNa
     return data.path;
 }
 
-export { supabaseAnon, supabaseAdmin, addCoordinate, lookupUser, createWalk, saveBlobToStorage };
+const getRecentCoordinates = async (walkId: string): Promise<Array<{
+    latitude: number, longitude: number, timestamp: string
+}>> => {
+    const { data, error } = await supabaseAdmin
+        .from('locations')
+        .select('location, created_at')
+        .eq('walk_id', walkId)
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+    if (error) {
+        console.error(error, error.message);
+        throw new Error(error.message);
+    }
+
+    return data.map((d: any) => {
+        return {
+            timestamp: d.created_at,
+            latitude: d.location.coordinates[0],
+            longitude: d.location.coordinates[1]
+        }
+    });
+}
+
+export {
+    supabaseAnon,
+    supabaseAdmin,
+    addCoordinate,
+    lookupUser,
+    createWalk,
+    saveBlobToStorage,
+    getRecentCoordinates
+};

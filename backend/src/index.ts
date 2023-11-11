@@ -3,7 +3,7 @@ import * as http from 'http';
 import * as WebSocket from 'ws';
 import { waitForRun, openai, assistantId, doTranscription } from './openai';
 import { User } from '@supabase/supabase-js'
-import { createWalk, addCoordinate, lookupUser, saveBlobToStorage } from './supabase';
+import { createWalk, addCoordinate, lookupUser, saveBlobToStorage, getRecentCoordinates } from './supabase';
 const app = express();
 
 const server = http.createServer(app);
@@ -56,6 +56,13 @@ const webSocketHandler = (webSocket: WebSocket) => {
                 //     console.log("Content: ", content);
                 //     webSocket.send(JSON.stringify({ type: 'message', content: content }));
                 // });
+            } else if (json.type === 'generate_new_chunk') {
+                if (threadId === null) {
+                    return;
+                }
+                const locations = await getRecentCoordinates(threadId);
+
+
 
             } else if (json.type === 'location') {
 
