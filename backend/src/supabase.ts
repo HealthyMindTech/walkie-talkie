@@ -92,6 +92,7 @@ const getLastCoordinate = async (walkId: string): Promise<{
         .select('longitude, latitude')
         .eq('walk_id', walkId)
         .order('created_at', { ascending: false })
+        .limit(1)
         .single()
 
     if (error) {
@@ -113,6 +114,7 @@ const getFirstCoordinate = async (walkId: string): Promise<{
         .select('longitude, latitude')
         .eq('walk_id', walkId)
         .order('created_at', { ascending: true })
+        .limit(1)
         .single()
 
     if (error) {
@@ -130,10 +132,11 @@ const getLastDistance = async (walkId: string): Promise<{
     latitude: number, longitude: number, distance: number
 } | null> => {
     const { data, error } = await supabaseAdmin
-        .from('locations')
+        .from('distance')
         .select('longitude, latitude, distance')
         .eq('walk_id', walkId)
         .order('created_at', { ascending: false })
+        .limit(1)
         .single();
 
     if (error) {

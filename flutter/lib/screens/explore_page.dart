@@ -282,7 +282,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '$distance m walked', // Level display
+                                    '${distance.round()} m walked', // Level display
                                     style: const TextStyle(
                                       color: Color(0xFFfbfcf4),
                                       fontWeight: FontWeight.bold,
