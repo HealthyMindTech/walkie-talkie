@@ -110,7 +110,7 @@ class StatsWidget extends StatelessWidget {
     const int level = 5;
     const double experience = 0.75; // 75% towards the next level
     const int xpNeeded = 100; // Mock value for XP needed for the next level
-    final int xpRemaining = ((1 - experience) * xpNeeded).toInt(); // Calculate remaining XP
+    final double xpRemaining = 4.1; // Calculate remaining XP
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -136,7 +136,7 @@ class StatsWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '$xpRemaining XP to next lvl', // XP remaining for next level
+                  'Walk $xpRemaining km to next lvl', // XP remaining for next level
                   style: const TextStyle(
                     color: Colors.white70,
                     fontSize: 16,

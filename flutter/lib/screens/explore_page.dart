@@ -170,28 +170,64 @@ class _ExplorePageState extends State<ExplorePage> {
                             children: [
                               Container(
                                 height: 2.0,
-                                color: Colors.grey[300],
+                                color: Color(0xFFfbfcf4),
                               ),
                               SizedBox(height: 2),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    'John the Chef',
-                                    style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey[300],
+                                  CustomButton(
+                                    // Level indicator
+                                    children: [
+                                      // Character icon
+                                      Icon(
+                                        Icons.person,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                    onPressed:
+                                        () {}, // Replace with your button press action
+                                  ),
+                                  RichText(
+                                    textAlign: TextAlign.center,
+                                    text: TextSpan(
+                                      style: DefaultTextStyle.of(context).style,
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                          text: 'John ',
+                                          style: TextStyle(
+                                            fontSize: 26.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFFfbfcf4),
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: 'the ',
+                                          style: TextStyle(
+                                            fontSize: 26.0,
+                                            fontWeight: FontWeight.normal,
+                                            color: Color(0xFFfbfcf4),
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: 'Chef',
+                                          style: TextStyle(
+                                            fontSize: 26.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFFfbfcf4),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   CustomButton(
                                     // Level indicator
                                     children: [
                                       Text(
-                                        '45',
+                                        'lvl 5',
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: Color(0xFFfbfcf4),
                                           fontWeight: FontWeight.bold,
                                         ),
                                       )
@@ -204,7 +240,7 @@ class _ExplorePageState extends State<ExplorePage> {
                               SizedBox(height: 2),
                               Container(
                                 height: 2.0,
-                                color: Colors.grey[300],
+                                color: Color(0xFFfbfcf4),
                               ),
                             ],
                           ),
@@ -213,20 +249,80 @@ class _ExplorePageState extends State<ExplorePage> {
                     ),
                   ),
                   SizedBox(height: 8),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: LinearProgressIndicator(
-                      value: 0.45, // Dummy progress value
-                      backgroundColor: Colors.white,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                          Color.fromRGBO(254, 159, 77, 1)),
-                      minHeight: 20,
+                  Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 0.0),
+                      decoration: BoxDecoration(
+                        // color: Colors.black.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Level and XP remaining row
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '3.2 km walked', // Level display
+                                style: const TextStyle(
+                                  color: Color(0xFFfbfcf4),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              Text(
+                                '4.1 km to level up', // XP remaining for next level
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                              height: 4), // Spacing between text and bar
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                                10), // Fully rounded corners
+                            child: Stack(
+                              children: [
+                                Container(
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFFfbfcf4), // Background color of the bar
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                FractionallySizedBox(
+                                  widthFactor:
+                                      0.75, // Fraction of the bar filled with experience
+                                  child: Container(
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                        colors: [
+                                          Color(0xFFf8c85c), Color(0xFFfc8c3e)
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 16),
             // Map area with padding
             Expanded(
               child: Padding(
