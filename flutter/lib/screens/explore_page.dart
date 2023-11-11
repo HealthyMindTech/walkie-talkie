@@ -208,21 +208,12 @@ class _ExplorePageState extends State<ExplorePage> {
                                                 .stop();
                                             Navigator.pop(context);
                                           }),
-                                      RichText(
-                                        textAlign: TextAlign.center,
-                                        text: TextSpan(
-                                          style: DefaultTextStyle.of(context)
-                                              .style,
-                                          children: <TextSpan>[
-                                            TextSpan(
-                                              text: widget.explorerName,
-                                              style: TextStyle(
-                                                fontSize: 26.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: const Color(0xFFfbfcf4),
-                                              ),
-                                            ),
-                                          ],
+                                      Text(
+                                        widget.explorerName,
+                                        style: const TextStyle(
+                                          color: Color(0xFFfbfcf4),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 28,
                                         ),
                                       ),
                                       CustomButton(

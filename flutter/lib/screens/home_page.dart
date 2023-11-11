@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import '../widgets/custom_button.dart';
 import 'package:stroke_text/stroke_text.dart';
@@ -225,10 +226,99 @@ class CustomInput extends StatelessWidget {
           CustomButton(
               children: [Icon(Icons.casino, color: Colors.white, size: 32)],
               onPressed: () {
-                // Navigate to the explore page
+                controller.text = getRandomNameProfession();
               })
         ],
       ),
     );
   }
 }
+
+List<String> names = [
+  'Aeliana',
+  'Braden',
+  'Caius',
+  'Delilah',
+  'Emeric',
+  'Freya',
+  'Gavriel',
+  'Hester',
+  'Idris',
+  'Jovita',
+  'Kael',
+  'Lysandra',
+  'Myron',
+  'Nyx',
+  'Orion',
+  'Persephone',
+  'Quinlan',
+  'Rhea',
+  'Soren',
+  'Thalia',
+  'Ulysses',
+  'Vesper',
+  'Wynter',
+  'Xanthe',
+  'Yara',
+  'Zephyr',
+];
+
+List<String> fantasyClasses = [
+  'Paladin',
+  'Sorcerer',
+  'Druid',
+  'Necromancer',
+  'Bard',
+  'Ranger',
+  'Monk',
+  'Alchemist',
+  'Illusionist',
+  'Enchanter',
+];
+
+List<String> realLifeProfessions = [
+  'Engineer',
+  'Scientist',
+  'Architect',
+  'Teacher',
+  'Chef',
+  'Artist',
+  'Nurse',
+  'Farmer',
+  'Pilot',
+  'Detective',
+];
+
+List<String> sciFiOptions = [
+  'Cyborg',
+  'Android Mechanic',
+  'Starship Captain',
+  'Quantum Physicist',
+  'Holo-programmer',
+  'Terraformer',
+  'Alien Anthropologist',
+  'Laser Surgeon',
+  'Galactic Trader',
+  'Warp Drive Engineer',
+];
+
+// Utility function to get a random element from a list
+T getRandomElement<T>(List<T> list) {
+  final random = Random();
+  var i = random.nextInt(list.length);
+  return list[i];
+}
+
+// Function to generate a random name with profession
+String getRandomNameProfession() {
+  String name = getRandomElement(names);
+  // Combine lists of professions
+  List<String> professions = []
+    ..addAll(fantasyClasses)
+    ..addAll(realLifeProfessions)
+    ..addAll(sciFiOptions);
+  String profession = getRandomElement(professions);
+
+  return '$name the $profession';
+}
+
