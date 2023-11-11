@@ -42,12 +42,12 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
 
   void _onAudioPlayerListener(PlayerState event) async {
     if (event.processingState == ProcessingState.completed) {
+      log.info("Got event: $event");
+
       if (!isPlayingChimes) {
-        _playChimes();
-      } else {
-        await audioPlayer.seek(const Duration(seconds: 0));
-        await audioPlayer.play();
+        widget.onEndOfAudio();
       }
+      _playChimes();
     }
   }
 
