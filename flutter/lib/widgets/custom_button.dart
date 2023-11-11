@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 
 class CustomButton extends StatefulWidget {
   final List<Widget> children;
@@ -12,7 +12,7 @@ class CustomButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CustomButtonState createState() => _CustomButtonState();
+  State<CustomButton> createState() => _CustomButtonState();
 }
 
 class _CustomButtonState extends State<CustomButton> {
@@ -27,11 +27,11 @@ class _CustomButtonState extends State<CustomButton> {
 
   Future<void> _loadSound() async {
     // Pre-load the sound file (replace with your asset)
-    await _audioPlayer.setSource(AssetSource('tap.mp3'));
+    await _audioPlayer.setAsset('assets/tap.mp3');
   }
 
   void _playSound() async {
-    await _audioPlayer.resume(); // Play the loaded sound
+    await _audioPlayer.play(); // Play the loaded sound
   }
 
   void _onTapDown(TapDownDetails details) {
@@ -76,11 +76,11 @@ class _CustomButtonState extends State<CustomButton> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: _isPressed
-                ? [
+                ? const [
                     Color(0xFFfc8c3e),
                     Color(0xFFf8c85c),
                   ]
-                : [
+                : const [
                     Color(0xFFf8c85c),
                     Color(0xFFfc8c3e),
                   ],
