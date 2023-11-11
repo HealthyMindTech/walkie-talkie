@@ -64,7 +64,7 @@ const getRecentCoordinates = async (walkId: string): Promise<Array<{
 }>> => {
     const { data, error } = await supabaseAdmin
         .from('locations')
-        .select('location, created_at')
+        .select('longitude, latitude, created_at')
         .eq('walk_id', walkId)
         .order('created_at', { ascending: false })
         .limit(10);

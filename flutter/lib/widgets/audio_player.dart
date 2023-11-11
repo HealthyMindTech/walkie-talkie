@@ -24,26 +24,29 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     super.initState();
     audioPlayer = AudioPlayer();
     audioPlayer.playerStateStream.listen(_onAudioPlayerListener);
-
-    // Play chimes initially
-    //r_playChimes();
   }
 
-  void startAudio() {
-    if (urls.isNotEmpty) {
-      currentUrlIndex = 0; // Start from the first file
-      _play();
+  void startAudio() async {
+    setState(() {
+      isPaused = false;
+    });
+
+    if (urls.isNotEmpty && currentUrlIndex == -1) {
+      currentUrlIndex = 0;
+      await audioPlayer.setUrl(urls[currentUrlIndex]);
+      await audioPlayer.play();
     } else {
-      // If no files are present, start chimes or handle accordingly
       _playChimes();
     }
   }
-
 
   void _onAudioPlayerListener(PlayerState event) async {
     if (event.processingState == ProcessingState.completed) {
       if (!isPlayingChimes) {
         _playChimes();
+      } else {
+        await audioPlayer.seek(const Duration(seconds: 0));
+        await audioPlayer.play();
       }
     }
   }
@@ -55,53 +58,28 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     debugPrint('Playing chimes');
   }
 
-  void _handleEndOfChimes() {
-    // Handle what should happen after chimes have played.
-    // For example, move to next file or something else.
-  }
-
-  void _nextFile() {
-    if (currentUrlIndex < urls.length - 1) {
-      currentUrlIndex++;
-    }
-  }
-
-  void _play() async {
-    if (currentUrlIndex == -1 || currentUrlIndex >= urls.length) {
-      return;
-    }
-    isPlayingChimes = false; // Ensure chimes are not considered playing
-    await audioPlayer.setUrl(urls[currentUrlIndex]);
-    await audioPlayer.play();
-  }
-
   void _playOrPause() async {
     if (isPaused) {
-      if (currentUrlIndex == -1) {
-        _nextFile();
-      }
-      _play();
-      setState(() {
-        isPaused = false;
-      });
+      await audioPlayer.play();
+
+      isPaused = false;
+      setState(() {});
     } else {
       await audioPlayer.pause();
-      setState(() {
-        isPaused = true;
-      });
+      isPaused = true;
+      setState(() {});
     }
   }
 
-  void addUrl(String url) {
+  void addUrl(String url) async {
     log.info('Adding url: $url');
     urls.add(url);
 
     // Stop chimes and play the new file immediately
-    if (isPlayingChimes) {
-      isPlayingChimes = false;
-      currentUrlIndex = urls.length - 1; // Set the index to the new file
-      _play(); // Play the new file
-    }
+    isPlayingChimes = false;
+    currentUrlIndex = urls.length - 1; // Set the index to the new file
+    await audioPlayer.setUrl(urls[currentUrlIndex]);
+    await audioPlayer.play();
 
     setState(() {});
   }
@@ -117,15 +95,21 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              if (urls.isNotEmpty)
-                IconButton(
-                    onPressed: _playOrPause,
-                    icon: isPaused
-                        ? const Icon(Icons.play_arrow, color: Colors.white)
-                        : const Icon(Icons.pause, color: Colors.white)),
+              IconButton(
+                  onPressed: _playOrPause,
+                  icon: isPaused
+                      ? const Icon(Icons.play_arrow, color: Colors.white)
+                      : const Icon(Icons.pause, color: Colors.white)),
               const Text(
                 'Audio Player',
                 style: TextStyle(color: Colors.white),
+              ),
+              IconButton(
+                onPressed: () {
+                  _playChimes();
+                  widget.onEndOfAudio();
+                },
+                icon: const Icon(Icons.forward, color: Colors.white),
               ),
             ],
           ),

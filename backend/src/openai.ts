@@ -36,4 +36,5 @@ const doTranscription = async (text: string): Promise<ArrayBuffer> => {
 
     return await resp.arrayBuffer();
 }
+
 export { openai, assistantId, waitForRun, doTranscription }

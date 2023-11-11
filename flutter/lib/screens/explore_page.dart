@@ -151,7 +151,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16.0, vertical: 8.0),
-                        color: Color.fromRGBO(36, 58, 47, 1),
+                        color: const Color.fromRGBO(36, 58, 47, 1),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -161,7 +161,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                 children: [
                                   Container(
                                     height: 2.0,
-                                    color: Color(0xFFfbfcf4),
+                                    color: const Color(0xFFfbfcf4),
                                   ),
                                   const SizedBox(height: 2),
                                   Row(
@@ -190,7 +190,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                               style: TextStyle(
                                                 fontSize: 26.0,
                                                 fontWeight: FontWeight.bold,
-                                                color: Color(0xFFfbfcf4),
+                                                color: const Color(0xFFfbfcf4),
                                               ),
                                             ),
                                             TextSpan(
@@ -198,7 +198,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                               style: TextStyle(
                                                 fontSize: 26.0,
                                                 fontWeight: FontWeight.normal,
-                                                color: Color(0xFFfbfcf4),
+                                                color: const Color(0xFFfbfcf4),
                                               ),
                                             ),
                                             TextSpan(
@@ -206,7 +206,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                               style: TextStyle(
                                                 fontSize: 26.0,
                                                 fontWeight: FontWeight.bold,
-                                                color: Color(0xFFfbfcf4),
+                                                color: const Color(0xFFfbfcf4),
                                               ),
                                             ),
                                           ],
@@ -217,7 +217,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                         children: [
                                           Text(
                                             'lvl 5',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Color(0xFFfbfcf4),
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -228,10 +228,10 @@ class _ExplorePageState extends State<ExplorePage> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 2),
+                                  const SizedBox(height: 2),
                                   Container(
                                     height: 2.0,
-                                    color: Color(0xFFfbfcf4),
+                                    color: const Color(0xFFfbfcf4),
                                   ),
                                 ],
                               ),
@@ -239,7 +239,7 @@ class _ExplorePageState extends State<ExplorePage> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Padding(
                         padding: const EdgeInsets.all(0.0),
                         child: Container(
@@ -331,7 +331,7 @@ class _ExplorePageState extends State<ExplorePage> {
                           mapController: _mapController,
                           options: MapOptions(
                             center: position ?? const LatLng(0, 0),
-                            zoom: 13.0,
+                            initialZoom: 13.0,
                           ),
                           children: [
                             TileLayer(

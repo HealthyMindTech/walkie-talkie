@@ -1,9 +1,10 @@
 import express from 'express';
 import * as http from 'http';
 import * as WebSocket from 'ws';
-import { waitForRun, openai, assistantId, doTranscription } from './openai';
+import { openai } from './openai';
 import { User } from '@supabase/supabase-js'
-import { createWalk, addCoordinate, lookupUser, saveBlobToStorage, getRecentCoordinates } from './supabase';
+import { runThreadAndGetTranscript } from './interactions';
+import { createWalk, addCoordinate, lookupUser, getRecentCoordinates } from './supabase';
 const app = express();
 
 const server = http.createServer(app);
@@ -38,31 +39,25 @@ const webSocketHandler = (webSocket: WebSocket) => {
                 threadId = thread.id;
                 await createWalk({ userId: user!.id, threadId: threadId });
 
-                const run = await openai.beta.threads.runs.create(threadId, {
-                    assistant_id: assistantId,
-                });
+                const path = await runThreadAndGetTranscript(threadId);
+                webSocket.send(JSON.stringify({ type: 'audio', path: path }));
 
-                waitForRun(threadId, run.id).then(async (message) => {
-                    console.log("Message: ", message);
-                    const transcription = await doTranscription(message);
-                    console.log("Blobbing ", transcription);
-                    const path = await saveBlobToStorage({ blob: transcription, fileName: `${run.id}.mp3` });
-                    webSocket.send(JSON.stringify({ type: 'audio', path: path }));
-                });
-                // openai.beta.threads.messages.list(threadId).then((response) => {
-                //     const messages = response.data;
-                //     const lastMessage = messages[messages.length - 1];
-                //     const content = lastMessage.content;
-                //     console.log("Content: ", content);
-                //     webSocket.send(JSON.stringify({ type: 'message', content: content }));
-                // });
             } else if (json.type === 'generate_new_chunk') {
                 if (threadId === null) {
                     return;
                 }
                 const locations = await getRecentCoordinates(threadId);
+                if (locations.length < 3) {
+                }
 
-                console.log(locations);
+                await openai.beta.threads.messages.create(threadId, {
+                    content: 'I walked to the left.',
+                    role: 'user',
+                });
+
+                const path = await runThreadAndGetTranscript(threadId);
+                webSocket.send(JSON.stringify({ type: 'audio', path: path }));
+
 
             } else if (json.type === 'location') {
 
