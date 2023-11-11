@@ -274,7 +274,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                     ),
                                   ),
                                   Text(
-                                    '${(5000 - distance).toStringAsFixed(1)} km to next level', // XP remaining display
+                                    '${((5000 - distance) / 1000).toStringAsFixed(1)} km to next level', // XP remaining display
                                     style: const TextStyle(
                                       color: Colors.white70,
                                       fontSize: 16,
