@@ -39,9 +39,7 @@ class _HomePageState extends State<HomePage> {
               // This should wrap the ListView
               child: Container(
                   padding: const EdgeInsets.fromLTRB(12, 12, 12, 16),
-                  child: ListView(
-                    children: [
-                      CustomInput(
+                  child: CustomInput(
                         controller: _nameController,
                         label: 'Name',
                         keyboardType: TextInputType.text,
@@ -49,8 +47,7 @@ class _HomePageState extends State<HomePage> {
                           onFieldSubmitted: (value) {
                           },
                       ),
-                    ],
-                  )),
+                  ),
             ),
             Expanded(
               flex: 4, // Adjust the flex factor as needed
@@ -105,7 +102,8 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 16),
             Container(
-              padding: const EdgeInsets.all(16.0),
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.all(18.0),
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(10),
@@ -123,7 +121,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 8),
                   LinearProgressIndicator(
-                    value: 0.75, // Mock progress value
+                    value: 0.0, // Mock progress value
                     backgroundColor: Colors.grey[800],
                     valueColor: const AlwaysStoppedAnimation<Color>(
                       Colors.orange, // Orange progress bar
@@ -132,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    '3.2 km walked - 4.1 km to next level',
+                    '0 km walked - 5 km to next level',
                     style: const TextStyle(
                       color: Colors.white70,
                       fontSize: 16,
@@ -197,7 +195,7 @@ class CustomInput extends StatelessWidget {
               ),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(
-                    vertical: 20.0,
+                    vertical: 15.0,
                     horizontal: 10), // Vertical padding inside the text field
                 filled: true,
                 fillColor: const Color(0xFFfbfcf4), // Field fill color
@@ -296,10 +294,10 @@ List<String> sciFiOptions = [
   'Quantum Physicist',
   'Holo-programmer',
   'Terraformer',
-  'Alien Anthropologist',
+  'Xenobiologist',
   'Laser Surgeon',
   'Galactic Trader',
-  'Warp Drive Engineer',
+  'WarpDrive Engineer',
 ];
 
 // Utility function to get a random element from a list

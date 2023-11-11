@@ -216,7 +216,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                           style: const TextStyle(
                                             color: Color(0xFFfbfcf4),
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 24,
+                                            fontSize: 22,
                                           ),
                                         ),
                                       ),
@@ -274,7 +274,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                     ),
                                   ),
                                   Text(
-                                    '4.1 km to level up', // XP remaining for next level
+                                    '${(5000 - distance).toStringAsFixed(1)} km to next level', // XP remaining display
                                     style: const TextStyle(
                                       color: Colors.white70,
                                       fontSize: 16,
@@ -340,7 +340,7 @@ class _ExplorePageState extends State<ExplorePage> {
                           options: MapOptions(
                             center:
                                 position ?? const LatLng(60.162048, 24.9135104),
-                            initialZoom: 13.0,
+                            initialZoom: 16.0,
                           ),
                           children: [
                             TileLayer(
