@@ -220,7 +220,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                               style: const TextStyle(
                                                 color: Color(0xFFfbfcf4),
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 22,
+                                                fontSize: 20,
                                               ),
                                             ),
                                           ),
@@ -276,7 +276,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                     style: const TextStyle(
                                       color: Color(0xFFfbfcf4),
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 20,
+                                      fontSize: 18,
                                     ),
                                   ),
                                   Text(
@@ -381,9 +381,9 @@ class _ExplorePageState extends State<ExplorePage> {
                       ),
                       const SizedBox(width: 8),
                       const StrokeText(
-                        text: "Start Listening!",
+                        text: "Start the story!",
                         textStyle: TextStyle(
-                          fontSize: 28,
+                          fontSize: 24,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),

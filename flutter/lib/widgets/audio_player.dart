@@ -97,22 +97,35 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              IconButton(
-                  onPressed: _playOrPause,
-                  icon: isPaused
-                      ? const Icon(Icons.play_arrow, color: Colors.white)
-                      : const Icon(Icons.pause, color: Colors.white)),
+              if (urls.isEmpty) ...[
+                // Spinner
+                Text("Generating... ", style: TextStyle(color: Colors.white)),
+                Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    ))
+              ] else
+                IconButton(
+                    onPressed: _playOrPause,
+                    icon: isPaused
+                        ? const Icon(Icons.play_arrow, color: Colors.white)
+                        : const Icon(Icons.pause, color: Colors.white)),
               const Text(
                 'Audio Player',
                 style: TextStyle(color: Colors.white),
               ),
-              IconButton(
-                onPressed: () {
-                  _playChimes();
-                  widget.onEndOfAudio();
-                },
-                icon: const Icon(Icons.forward, color: Colors.white),
-              ),
+              // IconButton(
+              //   onPressed: () {
+              //     _playChimes();
+              //     widget.onEndOfAudio();
+              //   },
+              //   icon: const Icon(Icons.forward, color: Colors.white),
+              // ),
             ],
           ),
         ),

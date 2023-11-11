@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                     child: StrokeText(
                       text: "Go Explore!",
                       textStyle: TextStyle(
-                        fontSize: 28,
+                        fontSize: 24,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
@@ -116,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                     'Level 1',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 22,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -174,7 +174,7 @@ class CustomInput extends StatelessWidget {
             style: const TextStyle(
               color: Colors.white, // Label color
               fontWeight: FontWeight.bold,
-              fontSize: 18,
+              fontSize: 16,
             ),
           ),
           SizedBox(width: 16), // Space between label and text field
@@ -188,7 +188,7 @@ class CustomInput extends StatelessWidget {
               style: const TextStyle(
                 color: Colors.black, // Text color
                 fontWeight: FontWeight.bold,
-                fontSize: 18,
+                fontSize: 16,
               ),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(

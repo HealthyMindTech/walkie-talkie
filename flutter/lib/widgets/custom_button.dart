@@ -31,6 +31,7 @@ class _CustomButtonState extends State<CustomButton> {
   }
 
   void _playSound() async {
+    await _audioPlayer.setAsset('assets/tap.mp3');
     await _audioPlayer.play(); // Play the loaded sound
   }
 
