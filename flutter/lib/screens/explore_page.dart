@@ -83,7 +83,7 @@ class _ExplorePageState extends State<ExplorePage> {
     _mapController = MapController();
     final token = Supabase.instance.client.auth.currentSession!.accessToken;
 
-    timer = Timer.periodic(const Duration(seconds: 10), _runTimer);
+    timer = Timer.periodic(const Duration(seconds: 45), _runTimer);
     Wakelock.enable();
 
     Backend().startWebsocket(token).then((webSocket) {
@@ -282,7 +282,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '${distance.round()} m walked', // Level display
+                                    '${(distance / 100).round() / 10} km walked', // Level display
                                     style: const TextStyle(
                                       color: Color(0xFFfbfcf4),
                                       fontWeight: FontWeight.bold,
