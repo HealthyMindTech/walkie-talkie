@@ -22,7 +22,8 @@ class ExplorePage extends StatefulWidget {
   final String title;
   final String explorerName;
 
-  const ExplorePage({super.key, required this.title, required this.explorerName});
+  const ExplorePage(
+      {super.key, required this.title, required this.explorerName});
 
   @override
   State<ExplorePage> createState() => _ExplorePageState();
@@ -208,12 +209,15 @@ class _ExplorePageState extends State<ExplorePage> {
                                                 .stop();
                                             Navigator.pop(context);
                                           }),
-                                      Text(
-                                        widget.explorerName,
-                                        style: const TextStyle(
-                                          color: Color(0xFFfbfcf4),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 28,
+                                      FittedBox(
+                                        fit: BoxFit.fitWidth,
+                                        child: Text(
+                                          widget.explorerName,
+                                          style: const TextStyle(
+                                            color: Color(0xFFfbfcf4),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 24,
+                                          ),
                                         ),
                                       ),
                                       CustomButton(
