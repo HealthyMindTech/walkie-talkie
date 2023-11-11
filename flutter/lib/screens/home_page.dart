@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
               flex: 1,
               // This should wrap the ListView
               child: Container(
-                  padding: EdgeInsets.fromLTRB(12, 12, 12, 16),
+                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 16),
                   child: ListView(
                     children: [
                       CustomInput(
@@ -46,7 +46,6 @@ class _HomePageState extends State<HomePage> {
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.done,
                         onFieldSubmitted: (value) {
-                          // Handle the input submission if needed
                         },
                       ),
                     ],
@@ -59,22 +58,17 @@ class _HomePageState extends State<HomePage> {
                     horizontal: 16), // Horizontal margin
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: Color(0xFFfc8c3e),
+                    color: const Color(0xFFfc8c3e),
                     width: 3,
                   ),
-                  borderRadius: BorderRadius.circular(
-                      10), // Rounded corners for the container
+                  borderRadius: BorderRadius.circular(10), // Rounded corners for the container
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(
-                      8), // Apply the same rounded corners to the clipper
+                  borderRadius: BorderRadius.circular(8), // Apply the same rounded corners to the clipper
                   child: Image.asset(
                     'background.png',
-                    width: MediaQuery.of(context)
-                        .size
-                        .width, // Force the image to take full width of the screen
-                    fit: BoxFit
-                        .fitHeight, // Fit the width of the image to the container
+                    width: MediaQuery.of(context).size.width, // Force the image to take full width of the screen
+                    fit: BoxFit.fitHeight, // Fit the width of the image to the container
                     // alignment: Alignment
                     //     .topCenter, // Align the image to the top of the container
                   ),
@@ -103,7 +97,9 @@ class _HomePageState extends State<HomePage> {
                   )
                 ],
                 onPressed: () {
-                  Navigator.pushNamed(context, '/explore');
+                  Navigator.pushNamed(context, '/explore', arguments: {
+                    'name': _nameController.text,
+                  });
                 },
               ),
             ),

@@ -20,8 +20,9 @@ import 'dart:async';
 
 class ExplorePage extends StatefulWidget {
   final String title;
+  final String explorerName;
 
-  const ExplorePage({super.key, required this.title});
+  const ExplorePage({super.key, required this.title, required this.explorerName});
 
   @override
   State<ExplorePage> createState() => _ExplorePageState();
@@ -87,7 +88,7 @@ class _ExplorePageState extends State<ExplorePage> {
     timer = Timer.periodic(const Duration(seconds: 45), _runTimer);
     Wakelock.enable();
 
-    Backend().startWebsocket(token).then((webSocket) {
+    Backend().startWebsocket(token, widget.explorerName).then((webSocket) {
       log.info("websocket: $webSocket");
       _webSocketChannel = webSocket;
       _webSocketChannel?.stream.listen(_websocketListen);
@@ -207,12 +208,21 @@ class _ExplorePageState extends State<ExplorePage> {
                                                 .stop();
                                             Navigator.pop(context);
                                           }),
-                                      Text(
-                                        'John the Chef',
-                                        style: const TextStyle(
-                                          color: Color(0xFFfbfcf4),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 26,
+                                      RichText(
+                                        textAlign: TextAlign.center,
+                                        text: TextSpan(
+                                          style: DefaultTextStyle.of(context)
+                                              .style,
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text: widget.explorerName,
+                                              style: TextStyle(
+                                                fontSize: 26.0,
+                                                fontWeight: FontWeight.bold,
+                                                color: const Color(0xFFfbfcf4),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                       CustomButton(

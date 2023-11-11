@@ -30,10 +30,11 @@ const webSocketHandler = (webSocket: WebSocket) => {
                 const storyStart = json.storyStart;
                 user = await lookupUser({ token: token });
 
-                console.log("Creating thread");
+                const explorerName = json.explorerName || user!.user_metadata.full_name;
+
                 const thread = await openai.beta.threads.create({
                     messages: [{
-                        content: storyStart || "start",
+                        content: `I am ${explorerName}. Please tell me a story.`,
                         role: 'user',
                     }]
                 });

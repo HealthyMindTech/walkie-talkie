@@ -11,7 +11,6 @@ import 'screens/login_screen.dart';
 import 'screens/home_page.dart';
 import 'screens/social_page.dart';
 
-
 final log = Logger('main');
 
 void main() async {
@@ -48,13 +47,14 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
         textTheme: GoogleFonts.carterOneTextTheme(
-           Theme.of(context).textTheme,
-      ),
+          Theme.of(context).textTheme,
+        ),
       ),
       builder: (context, child) {
         return LayoutBuilder(
           builder: (context, constraints) {
-            const maxWidth = 500.0; // Set the max width for a 'mobile-like' view
+            const maxWidth =
+                500.0; // Set the max width for a 'mobile-like' view
             final isDesktop = MediaQuery.of(context).size.width > maxWidth;
             if (isDesktop) {
               // If the screen width is larger than maxWidth, constrain the child's width
@@ -73,8 +73,16 @@ class MyApp extends StatelessWidget {
       },
       routes: {
         '/': (context) => ensureLoggedIn(child: const HomePage()),
-        '/explore': (context) =>
-            ensureLoggedIn(child: const ExplorePage(title: 'Walkie Talkie')),
+        '/explore': (context) {
+          final args = (ModalRoute.of(context)?.settings.arguments
+              as Map<String, dynamic>?);
+          final explorerName = args?['name'] as String?;
+          return ensureLoggedIn(
+              child: ExplorePage(
+                title: 'Walkie Talkie',
+                explorerName: explorerName ?? 'John the Chef',
+          ));
+        },
         '/adventure': (context) => ensureLoggedIn(child: const HomePage()),
         '/config': (context) => ensureLoggedIn(child: const ProfilePage()),
         '/social': (context) => ensureLoggedIn(child: const SocialPage()),
