@@ -330,7 +330,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       child: FlutterMap(
                           mapController: _mapController,
                           options: MapOptions(
-                            center: position ?? const LatLng(0, 0),
+                            center: position ?? const LatLng(60.162048, 24.9135104),
                             initialZoom: 13.0,
                           ),
                           children: [
