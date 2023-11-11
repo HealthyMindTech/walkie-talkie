@@ -67,7 +67,7 @@ const getRecentCoordinates = async (walkId: string): Promise<Array<{
         .select('longitude, latitude, created_at')
         .eq('walk_id', walkId)
         .order('created_at', { ascending: false })
-        .limit(10);
+        .limit(20);
 
     if (error) {
         console.error(error, error.message);

@@ -6,6 +6,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:logging/logging.dart';
+import 'package:wakelock/wakelock.dart';
 
 import '../geolocator.dart';
 import '../widgets/geometry.dart';
@@ -62,6 +63,8 @@ class _ExplorePageState extends State<ExplorePage> {
     super.initState();
     _mapController = MapController();
     final token = Supabase.instance.client.auth.currentSession!.accessToken;
+
+    Wakelock.enable();
 
     Backend().startWebsocket(token).then((webSocket) {
       log.info("websocket: $webSocket");
@@ -284,8 +287,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                     Container(
                                       height: 10,
                                       decoration: BoxDecoration(
-                                        color: Color(
-                                            0xFFfbfcf4), // Background color of the bar
+                                        color: const Color(0xFFfbfcf4), // Background color of the bar
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
@@ -298,7 +300,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                           gradient: LinearGradient(
                                             begin: Alignment.centerLeft,
                                             end: Alignment.centerRight,
-                                            colors: [
+                                            colors: const [
                                               Color(0xFFf8c85c),
                                               Color(0xFFfc8c3e)
                                             ],
@@ -394,6 +396,7 @@ class _ExplorePageState extends State<ExplorePage> {
     subscription?.cancel();
     _mapController.dispose();
     _webSocketChannel?.sink.close();
+    Wakelock.disable();
     super.dispose();
   }
 }

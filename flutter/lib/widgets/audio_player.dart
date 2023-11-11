@@ -32,7 +32,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     });
 
     if (urls.isNotEmpty && currentUrlIndex == -1) {
-      currentUrlIndex = 0;
+      currentUrlIndex = urls.length - 1;
       await audioPlayer.setUrl(urls[currentUrlIndex]);
       await audioPlayer.play();
     } else {
@@ -77,9 +77,11 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
 
     // Stop chimes and play the new file immediately
     isPlayingChimes = false;
-    currentUrlIndex = urls.length - 1; // Set the index to the new file
-    await audioPlayer.setUrl(urls[currentUrlIndex]);
-    await audioPlayer.play();
+    if (!isPaused) {
+      currentUrlIndex = urls.length - 1; // Set the index to the new file
+      await audioPlayer.setUrl(urls[currentUrlIndex]);
+      await audioPlayer.play();
+    }
 
     setState(() {});
   }
