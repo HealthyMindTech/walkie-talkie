@@ -52,11 +52,13 @@ const webSocketHandler = (webSocket: WebSocket) => {
                         return;
                     }
                     const locations = await getRecentCoordinates(threadId);
+                    console.log(threadId);
+                    console.log(locations);
                     const choices = ['left', 'right', 'forward'];
                     let direction;
                     try {
                         const recentLocation = locations[locations.length - 1];
-                        const middleLocation = locations[Math.floor(locations.length * 3 / 2)];
+                        const middleLocation = locations[Math.floor(locations.length * 2 / 3)];
                         const firstLocation = locations[0];
                         const initialBearing = calculateBearing(
                             firstLocation.latitude,

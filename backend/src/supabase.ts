@@ -74,6 +74,7 @@ const getRecentCoordinates = async (walkId: string): Promise<Array<{
         throw new Error(error.message);
     }
 
+    console.log(data);
     return data.map((d: any) => {
         return {
             timestamp: d.created_at,

@@ -9,11 +9,9 @@ const openai = new OpenAI({ apiKey: '<YOUR OPENAI API KEY>' });
 
 const waitForRun = async (threadId: string, runId: string): Promise<string> => {
     const run = await openai.beta.threads.runs.retrieve(threadId, runId);
-    console.log(run);
     if (run.status === 'completed') {
         const messages = await openai.beta.threads.messages.list(threadId);
 
-        console.log(messages);
         return messages.data[0].content.map((m) => m.type === 'text' ? m.text.value : '').join('\n');
     } else if (run.status === 'in_progress' || run.status === 'queued') {
         return new Promise((resolve) => {
