@@ -64,7 +64,12 @@ const webSocketHandler = (webSocket: WebSocket) => {
                     return;
                 }
                 const location = json.location;
-                await addCoordinate({ userId: user!.id, latitude: location.latitude, longitude: location.longitude });
+                await addCoordinate({
+                    userId: user!.id,
+                    latitude: location.latitude,
+                    longitude: location.longitude,
+                    walk: threadId
+                });
             } else {
                 console.error(`Unknown message type: ${json.type}`);
             }
