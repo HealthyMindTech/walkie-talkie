@@ -60,4 +60,4 @@ function analyzeMovement(coordinates: Coordinate[]): string {
     }
 }
 
-export { analyzeMovement, averageBearing };
+export { calculateBearing };

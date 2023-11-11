@@ -5,7 +5,7 @@ import { openai } from './openai';
 import { User } from '@supabase/supabase-js'
 import { runThreadAndGetTranscript } from './interactions';
 import { createWalk, addCoordinate, lookupUser, getRecentCoordinates } from './supabase';
-import { calculateBearing } from './bearing';
+import { calculateBearing } from './bearings';
 const app = express();
 
 const server = http.createServer(app);
