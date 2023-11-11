@@ -22,6 +22,19 @@ const addCoordinate = async ({ userId, latitude, longitude }: { userId: string, 
     }
 }
 
+const createWalk = async ({ userId, threadId }: { userId: string, threadId: string }): Promise<void> => {
+    const { data, error } = await supabaseAdmin
+        .from('walks')
+        .insert([
+            { user_id: userId, id: threadId },
+        ]);
+    if (error) {
+        console.log(`Error: ${error.message}`, error, data);
+        console.error(error.message);
+        throw new Error(error.message);
+    }
+}
+
 const lookupUser = async ({ token }: { token: string }): Promise<User> => {
     const { data, error } = await supabaseAdmin.auth.getUser(token);
     if (error) {
@@ -31,4 +44,16 @@ const lookupUser = async ({ token }: { token: string }): Promise<User> => {
     return data.user;
 }
 
-export { supabaseAnon, supabaseAdmin, addCoordinate, lookupUser };
+const saveBlobToStorage = async ({ blob, fileName }: { blob: ArrayBuffer, fileName: string }) => {
+    const { data, error } = await supabaseAdmin.storage
+        .from('audio')
+        .upload(fileName, blob);
+
+    if (error) {
+        console.error(error, error.message);
+        throw new Error(error.message);
+    }
+    return data.path;
+}
+
+export { supabaseAnon, supabaseAdmin, addCoordinate, lookupUser, createWalk, saveBlobToStorage };
