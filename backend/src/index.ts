@@ -62,7 +62,7 @@ const webSocketHandler = (webSocket: WebSocket) => {
                 }
                 const locations = await getRecentCoordinates(threadId);
 
-
+                console.log(locations);
 
             } else if (json.type === 'location') {
 

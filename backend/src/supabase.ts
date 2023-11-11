@@ -13,7 +13,7 @@ const addCoordinate = async ({ userId, latitude, longitude, walkId }: { walkId: 
     const { data, error } = await supabaseAdmin
         .from('locations')
         .insert([
-            { walk_id: walkId, user_id: userId, location: `POINT(${latitude} ${longitude})` },
+            { walk_id: walkId, user_id: userId, latitude: latitude, longitude: longitude },
         ]);
     if (error) {
         console.log(`Error: ${error.message}`, error, data);
@@ -77,8 +77,8 @@ const getRecentCoordinates = async (walkId: string): Promise<Array<{
     return data.map((d: any) => {
         return {
             timestamp: d.created_at,
-            latitude: d.location.coordinates[0],
-            longitude: d.location.coordinates[1]
+            latitude: d.latitude,
+            longitude: d.longitude
         }
     });
 }
