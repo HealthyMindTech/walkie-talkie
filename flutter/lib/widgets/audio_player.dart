@@ -99,7 +99,15 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
             children: [
               if (urls.isEmpty) ...[
                 // Spinner
-                Text("Generating... ", style: TextStyle(color: Colors.white)),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Generating,",
+                        style: TextStyle(color: Colors.white)),
+                    Text("prlease wait... ",
+                        style: TextStyle(color: Colors.white)),
+                  ],
+                ),
                 Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: SizedBox(
